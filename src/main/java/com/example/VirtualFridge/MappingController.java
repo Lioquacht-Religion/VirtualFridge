@@ -2,6 +2,7 @@ package com.example.VirtualFridge;
 
 import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
+import com.example.VirtualFridge.model.UserList;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -28,11 +29,14 @@ public class MappingController {
 
 
     @GetMapping("/user/all")
-    public Collection<User> getUsers(//@RequestParam(value = "email", defaultValue = "none")
-                            //String email
+    public UserList getUsers(//@RequestParam(value = "email", defaultValue = "none")
+                             //String email
     ){
 
-        return getPropertyFileUserManager("src/main/resources/user.properties").getAllUsers();
+        UserList userList = new UserList();
+        userList.setUsers();
+
+        return userList;
     }
 
 

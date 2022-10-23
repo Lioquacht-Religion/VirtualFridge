@@ -25,7 +25,7 @@ public class PropertyFileUserManager {
     }
 
     //@Override
-    public Collection<User> getAllUsers() {
+    public List<User> getAllUsers() {
 
         List<User> users = new ArrayList<>();
 
