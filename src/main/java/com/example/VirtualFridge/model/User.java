@@ -1,10 +1,11 @@
 package com.example.VirtualFridge.model;
 
 public class User {
-    private String name = "Std", password = "";
+    private String name = "Std", email = "", password = "";
 
-    public User(String name, String password){
+    public User(String name, String email, String password){
         this.name = name;
+        this.email = email;
         this.password = password;
     }
 }
