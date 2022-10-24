@@ -1,5 +1,6 @@
 package com.example.VirtualFridge.dataManagerImpl;
 
+import com.example.VirtualFridge.dataManager.UserManager;
 import com.example.VirtualFridge.model.User;
 
 import java.io.FileInputStream;
@@ -9,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-public class PropertyFileUserManager {
+public class PropertyFileUserManager implements UserManager {
     String fileName;
 
     static PropertyFileUserManager propertyFileUserManager = null;
@@ -24,7 +25,7 @@ public class PropertyFileUserManager {
         return propertyFileUserManager;
     }
 
-    //@Override
+    @Override
     public List<User> getAllUsers() {
 
         List<User> users = new ArrayList<>();
@@ -51,5 +52,10 @@ public class PropertyFileUserManager {
         }
 
         return users;
+    }
+
+    @Override
+    public void addUser(User user){
+
     }
 }

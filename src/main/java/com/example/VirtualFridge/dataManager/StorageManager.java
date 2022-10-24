@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public interface StorageManager {
     Collection<Grocery> getAllStorages(User user);
-    void addGrocery(Grocery grocery, Storage storage, User user);
+    void addGrocery(User user, Storage storage, Grocery grocery );
 
     // TODO
     // removeTask, getTasksInOrder, getTaskByTaskID, ...
