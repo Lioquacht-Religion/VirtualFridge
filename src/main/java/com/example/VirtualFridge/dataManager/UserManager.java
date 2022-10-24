@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public interface UserManager {
     Collection<User> getAllUsers();
-    void addUser(User user);
+    String addUser(User user);
 
     // TODO
     // removeTask, getTasksInOrder, getTaskByTaskID, ...

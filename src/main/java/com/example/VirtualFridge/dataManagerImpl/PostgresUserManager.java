@@ -70,7 +70,7 @@ public class PostgresUserManager implements UserManager {
     }
 
     @Override
-    public void addUser(User user) {
+    public String addUser(User user) {
 
         Statement stmt = null;
         Connection connection = null;
@@ -96,6 +96,8 @@ public class PostgresUserManager implements UserManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return user.getEmail();
 
     }
 
