@@ -13,9 +13,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class PostgresUserManager implements UserManager {
-    String databaseURL = "jdbc:postgresql://ec2-44-207-253-50.compute-1.amazonaws.com:5432/d4tcg6dkd9hsnm";//"jdbc:postgresql://ec2-3-81-240-17.compute-1.amazonaws.com:5432/d9l0o5gfhlc5co";
-    String username = "ktjwdbskjndsxy";
-    String password = "199e5be5e918a0ea5fb12a114222a9471dd3ef0a30f1bc163bf5ebbe956b69a8";
+    String databaseURL = "jdbc:postgresql://ec2-54-147-36-107.compute-1.amazonaws.com:5432/df2uguufu0105c";//"jdbc:postgresql://ec2-3-81-240-17.compute-1.amazonaws.com:5432/d9l0o5gfhlc5co";
+    String username = "myfgccvkkfndup";
+    String password = "c385301dd22562f1359213916017a689bfd17eb6f44db28aa5eb0ab85c34b436";
     BasicDataSource basicDataSource;
 
     static PostgresUserManager postgresUserManager = null;
@@ -111,7 +111,7 @@ public class PostgresUserManager implements UserManager {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
 
-            String dropTable = "DROP TABLE IF EXISTS tasks";
+            String dropTable = "DROP TABLE IF EXISTS users";
             stmt.executeUpdate(dropTable);
 
             String createTable = "CREATE TABLE users (" +

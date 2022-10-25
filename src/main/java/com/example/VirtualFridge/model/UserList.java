@@ -1,5 +1,6 @@
 package com.example.VirtualFridge.model;
 
+import com.example.VirtualFridge.dataManagerImpl.PostgresUserManager;
 import com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager;
 
 import java.util.Collection;
@@ -15,8 +16,8 @@ public class UserList {
 
 
     public void setUsers() {
-        PropertyFileUserManager UserManager = PropertyFileUserManager.getPropertyFileUserManager("src/main/resources/user.properties");
-        //TaskManager taskManager = PostgresTaskManagerImpl.getPostgresTaskManagerImpl();
+        //PropertyFileUserManager UserManager = PropertyFileUserManager.getPropertyFileUserManager("src/main/resources/user.properties");
+        PostgresUserManager UserManager = PostgresUserManager.getPostgresUserManager();
         users = UserManager.getAllUsers();
     }
 
