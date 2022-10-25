@@ -1,5 +1,6 @@
 package com.example.VirtualFridge;
 
+import com.example.VirtualFridge.dataManagerImpl.PostgresUserManager;
 import com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager;
 import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
@@ -38,6 +39,19 @@ public class MappingController {
         userList.setUsers();
 
         return userList;
+    }
+
+    @PostMapping(
+            path = "/user/createtable"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createTask() {
+
+        final PostgresUserManager postgresUserManager =
+                PostgresUserManager.getPostgresUserManager();
+        postgresUserManager.createTableUser();
+
+        return "Database Table created";
     }
 
 

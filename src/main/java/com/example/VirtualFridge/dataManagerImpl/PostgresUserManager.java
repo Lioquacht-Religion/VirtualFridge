@@ -101,7 +101,7 @@ public class PostgresUserManager implements UserManager {
 
     }
 
-    public void createTableTask() {
+    public void createTableUser() {
 
         // Be carefull: It deletes data if table already exists.
         //
