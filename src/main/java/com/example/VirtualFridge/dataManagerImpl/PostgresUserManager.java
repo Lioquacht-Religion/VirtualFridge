@@ -69,6 +69,42 @@ public class PostgresUserManager implements UserManager {
         return users;
     }
 
+    //@Override
+    public User getUser(User user) {
+
+        User r_user = new User("", "", "");
+        Statement stmt = null;
+        Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            //SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass';
+            ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE " +
+                    "name = '" + user.getName() +
+                    "' AND email = '" + user.getEmail() +
+                    "' AND password = '" + user.getPassword() + "';"
+            );
+                        r_user = new User(
+                                rs.getString("name"),
+                                rs.getString("email"),
+                                rs.getString("password")
+                        );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return r_user;
+    }
+
     @Override
     public String addUser(User user) {
 
