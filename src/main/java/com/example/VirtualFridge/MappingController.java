@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager.getPropertyFileUserManager;
 
@@ -48,6 +50,7 @@ public class MappingController {
     )
     @ResponseStatus(HttpStatus.OK)
     public String createUserTable() {
+        Logger.getLogger("Test").log(Level.INFO, "Start Post create Table");
 
         final PostgresUserManager postgresUserManager =
                 PostgresUserManager.getPostgresUserManager();
