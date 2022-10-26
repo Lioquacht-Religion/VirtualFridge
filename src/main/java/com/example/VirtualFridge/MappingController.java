@@ -30,15 +30,27 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public void createUser(@RequestBody User user){
+    public String createUser(@RequestBody User user){
         //getPropertyFileUserManager("src/main/resources/user.properties").addUser(user);
         getPostgresUserManager().addUser(user);
+        return "posted user with email " + user.getEmail();
     }
 
 
     @GetMapping("/user/all")
-    public UserList getUsers(//@RequestParam(value = "email", defaultValue = "none")
+    public Collection<User> getUsers(//@RequestParam(value = "email", defaultValue = "none")
                              //String email
+    ){
+
+        //UserList userList = new UserList();
+        //userList.setUsers();
+
+        return getPostgresUserManager().getAllUsers();
+        //return userList;
+    }
+
+    @GetMapping("/user")
+    public UserList getUser(@RequestBody User user
     ){
 
         UserList userList = new UserList();
@@ -74,10 +86,11 @@ public class MappingController {
             })
     @ResponseStatus(HttpStatus.OK)
     public String deleteUser(@RequestBody User user){
-        UserList userList = new UserList();
-        userList.setUsers();
-        userList.deleteUser(user);
-        getPropertyFileUserManager("src/main/resources/user.properties").storeAllUsers(userList.getUsers());
+        //UserList userList = new UserList();
+        //userList.setUsers();
+        //userList.deleteUser(user);
+        //getPropertyFileUserManager("src/main/resources/user.properties").storeAllUsers(userList.getUsers());
+        getPostgresUserManager().deleteUser(user);
 
         return user.getEmail();
     }

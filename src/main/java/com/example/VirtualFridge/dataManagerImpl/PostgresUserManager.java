@@ -101,6 +101,36 @@ public class PostgresUserManager implements UserManager {
 
     }
 
+    public void deleteUser(User user){
+
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+
+            System.out.println("delete User");
+
+            String deleteUser = "DELETE FROM users WHERE " +
+                    "email = " + user.getEmail() + ";";
+            stmt.executeUpdate(deleteUser);
+            System.out.println("user Table created");
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        try{
+            stmt.close();
+            connection.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
     public void createTableUser() {
 
         // Be carefull: It deletes data if table already exists.
