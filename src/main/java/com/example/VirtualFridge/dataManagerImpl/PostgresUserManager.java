@@ -105,14 +105,18 @@ public class PostgresUserManager implements UserManager {
 
         // Be carefull: It deletes data if table already exists.
         //
+        System.out.println("Starting to create new user Table");
         Statement stmt = null;
         Connection connection = null;
         try{
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
+            System.out.println("getting datasource");
 
             String dropTable = "DROP TABLE IF EXISTS users";
             stmt.executeUpdate(dropTable);
+
+            System.out.println("creating user Table");
 
             String createTable = "CREATE TABLE users (" +
                     "id SERIAL PRIMARY KEY, " +
@@ -120,6 +124,7 @@ public class PostgresUserManager implements UserManager {
                     "email varchar(258) NOT NULL, " +
                     "password varchar(100) NOT NULL)";
             stmt.executeUpdate(createTable);
+            System.out.println("user Table created");
 
         }
         catch(SQLException e){
