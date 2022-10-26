@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.example.VirtualFridge.dataManagerImpl.PostgresUserManager.getPostgresUserManager;
 import static com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager.getPropertyFileUserManager;
 
 //TODO: CHange all propertyfilemanager zu postgres
@@ -30,7 +31,8 @@ public class MappingController {
     )
     @ResponseStatus(HttpStatus.OK)
     public void createUser(@RequestBody User user){
-        getPropertyFileUserManager("src/main/resources/user.properties").addUser(user);
+        //getPropertyFileUserManager("src/main/resources/user.properties").addUser(user);
+        getPostgresUserManager().addUser(user);
     }
 
 
@@ -53,7 +55,7 @@ public class MappingController {
         Logger.getLogger("Test").log(Level.INFO, "Start Post create Table");
 
         final PostgresUserManager postgresUserManager =
-                PostgresUserManager.getPostgresUserManager();
+                getPostgresUserManager();
         postgresUserManager.createTableUser();
 
         return "Database Table created";
