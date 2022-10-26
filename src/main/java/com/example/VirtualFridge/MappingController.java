@@ -15,6 +15,8 @@ import java.util.List;
 
 import static com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager.getPropertyFileUserManager;
 
+//TODO: CHange all propertyfilemanager zu postgres
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1.0")
@@ -45,7 +47,7 @@ public class MappingController {
             path = "/user/createtable"
     )
     @ResponseStatus(HttpStatus.OK)
-    public String createTask() {
+    public String createUserTable() {
 
         final PostgresUserManager postgresUserManager =
                 PostgresUserManager.getPostgresUserManager();
