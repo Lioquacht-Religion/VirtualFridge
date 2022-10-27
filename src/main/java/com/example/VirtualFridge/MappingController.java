@@ -108,7 +108,7 @@ public class MappingController {
     )
     @ResponseStatus(HttpStatus.OK)
     public String createStorageTable() {
-        Logger.getLogger("Test").log(Level.INFO, "Start Post create Table");
+        //Logger.getLogger("Test").log(Level.INFO, "Start Post create Table");
 
         final PostgresUserManager postgresUserManager =
                 getPostgresUserManager();

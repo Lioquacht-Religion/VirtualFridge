@@ -263,7 +263,7 @@ public class PostgresUserManager implements UserManager {
                     "id SERIAL PRIMARY KEY, " +
                     "name varchar(100) NOT NULL, " +
                     "User int NOT NULL, " +
-                    "FOREIGN KEY (User) REFERENCES users(id)";
+                    "FOREIGN KEY (User) REFERENCES users(id))";
             stmt.executeUpdate(createTable);
             System.out.println("storage Table created");
 
