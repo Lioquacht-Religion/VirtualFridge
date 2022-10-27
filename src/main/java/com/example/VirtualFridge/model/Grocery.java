@@ -5,6 +5,7 @@ public class Grocery {
     unit = "";
     private int amount = 0;
 
+
     Grocery(String name, String unit, int amount){
         this.name = name;
         this.unit = unit;
@@ -15,8 +16,16 @@ public class Grocery {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUnit() {
         return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public void setAmount(int amount) {
@@ -26,4 +35,6 @@ public class Grocery {
     public int getAmount() {
         return amount;
     }
+
+
 }
