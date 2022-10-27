@@ -1,6 +1,7 @@
 package com.example.VirtualFridge.dataManagerImpl;
 
 import com.example.VirtualFridge.dataManager.UserManager;
+import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -321,6 +322,38 @@ public class PostgresUserManager implements UserManager {
             e.printStackTrace();
         }
 
+
+    }
+
+    public String addStorage(Storage storage) {
+
+        Statement stmt = null;
+        Connection connection = null;
+
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String getStorOwnerId = "(SELECT id FROM users WHERE email = '" + storage.getOwner().getEmail() + "')";
+            String udapteSQL = "INSERT into storages (name, Owner) VALUES (" +
+                    "'" + storage.getName() + "', " +
+                    "'" + getStorOwnerId + "')";
+
+            stmt.executeUpdate(udapteSQL);
+
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return storage.getName();
 
     }
 

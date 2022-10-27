@@ -108,6 +108,17 @@ public class MappingController {
     }
 
     @PostMapping(
+            path = "/storage",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createStorage(@RequestBody Storage storage){
+        //getPropertyFileUserManager("src/main/resources/user.properties").addUser(user);
+        getPostgresUserManager().addStorage(storage);
+        return "posted user with email " + storage.getName();
+    }
+
+    @PostMapping(
             path = "/storage/createtable"
     )
     @ResponseStatus(HttpStatus.OK)
@@ -132,8 +143,10 @@ public class MappingController {
                 getPostgresUserManager();
         postgresUserManager.createTableGroceries();
 
-        return "Database Storage Table created";
+        return "Database Groceries Table created";
     }
+
+
 
 
     @PostMapping(
