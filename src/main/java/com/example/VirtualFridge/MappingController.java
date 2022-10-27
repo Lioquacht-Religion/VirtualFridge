@@ -49,14 +49,18 @@ public class MappingController {
         //return userList;
     }
 
-    @GetMapping("/user")
-    public User getUser(@RequestBody User user
+    @GetMapping(
+            path= "/user",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<User> getUser(@RequestBody User user
     ){
         return getPostgresUserManager().getUser(user);
     }
 
     @PutMapping("/user")
-    public User putUser(@RequestBody User user
+    public Collection<User> putUser(@RequestBody User user
     ){
         return getPostgresUserManager().getUser(user);
     }

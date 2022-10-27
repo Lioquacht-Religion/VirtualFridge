@@ -71,28 +71,32 @@ public class PostgresUserManager implements UserManager {
 
     //TODO: FIX does not work
     //@Override
-    public User getUser(User user) {
+    public Collection<User> getUser(User user) {
 
-        User r_user = new User("", "", "");
+        Collection<User> r_user = new ArrayList<User>();
         Statement stmt = null;
         Connection connection = null;
 
         try {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
+            String getUser =
+                    "SELECT name, email, password FROM users WHERE name = 'Klaus Riec'";
             //SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass';
-            ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE " +
+            ResultSet rs = stmt.executeQuery(getUser);
+                   //"SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass'"
+                    /*"SELECT * FROM users WHERE " +
                     "name = '" + user.getName() +
                     "' AND email = '" + user.getEmail() +
-                    "' AND password = '" + user.getPassword() + "';"
-            );
+                    "' AND password = '" + user.getPassword() + "'"*/
 
-            rs.next();
-                r_user = new User(
+            while(rs.next()) {
+                r_user.add( new User(
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password")
-                );
+                ));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
