@@ -168,7 +168,7 @@ public class PostgresUserManager implements UserManager {
             e.printStackTrace();
         }
 
-        return user.getEmail();
+        return "changed userstuff: " + user.getEmail();
 
     }
 
