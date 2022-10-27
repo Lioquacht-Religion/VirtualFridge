@@ -71,7 +71,7 @@ public class PostgresUserManager implements UserManager {
 
     //TODO: FIX does not work
     //@Override
-    public Collection<User> getUser(User user) {
+    public Collection<User> getUser(String attToSearch, String attribute) {
 
         Collection<User> r_user = new ArrayList<User>();
         Statement stmt = null;
@@ -81,14 +81,9 @@ public class PostgresUserManager implements UserManager {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
             String getUser =
-                    "SELECT name, email, password FROM users WHERE name = 'Klaus Riec'";
-            //SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass';
+                    "SELECT * FROM users WHERE " + attToSearch + " = '" + attribute + "'";
+
             ResultSet rs = stmt.executeQuery(getUser);
-                   //"SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass'"
-                    /*"SELECT * FROM users WHERE " +
-                    "name = '" + user.getName() +
-                    "' AND email = '" + user.getEmail() +
-                    "' AND password = '" + user.getPassword() + "'"*/
 
             while(rs.next()) {
                 r_user.add( new User(
@@ -125,6 +120,39 @@ public class PostgresUserManager implements UserManager {
                     "'" + user.getName() + "', " +
                     "'" + user.getEmail() + "', " +
                     "'" + user.getPassword() + "')";
+
+            stmt.executeUpdate(udapteSQL);
+
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user.getEmail();
+
+    }
+
+    public String putUser(User user) {
+
+        Statement stmt = null;
+        Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL =
+                    "UPDATE users" +
+                            "SET name = '" + user.getName() + "', email= '" + user.getEmail() +"', password='"
+                            + user.getPassword() + "' " +
+                            "WHERE email = '" + user.getEmail() +"'";
+
 
             stmt.executeUpdate(udapteSQL);
 

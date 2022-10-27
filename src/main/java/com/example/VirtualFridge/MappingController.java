@@ -49,20 +49,21 @@ public class MappingController {
         //return userList;
     }
 
-    @GetMapping(
-            path= "/user",
+    @GetMapping("/user/email"
+    )
+    public Collection<User> getUser(@RequestParam String email
+    ){
+        return getPostgresUserManager().getUser("email", email);
+    }
+
+    @PutMapping(path= "/user",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public Collection<User> getUser(@RequestBody User user
+    public String putUser(@RequestBody User user
     ){
-        return getPostgresUserManager().getUser(user);
-    }
-
-    @PutMapping("/user")
-    public Collection<User> putUser(@RequestBody User user
-    ){
-        return getPostgresUserManager().getUser(user);
+        getPostgresUserManager().putUser(user);
+        return "updated User: " + user.getEmail();
     }
 
     @PostMapping(
