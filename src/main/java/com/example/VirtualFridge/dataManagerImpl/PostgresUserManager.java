@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -71,9 +72,9 @@ public class PostgresUserManager implements UserManager {
 
     //TODO: FIX does not work
     //@Override
-    public User getUser(User user) {
+    public Collection<User> getUser(User user) {
 
-        User r_user = new User("", "", "");
+        Collection<User> r_user = new ArrayList<>();
         Statement stmt = null;
         Connection connection = null;
 
@@ -87,12 +88,14 @@ public class PostgresUserManager implements UserManager {
                     "' AND password = '" + user.getPassword() + "';"
             );
             //FLO DU HUND HAHA
-            rs.next();
-                r_user = new User(
+            while (rs.next()) {
+                r_user.add( new User(
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password")
-                );
+                ));
+               // System.out.println(r_user.getEmail());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

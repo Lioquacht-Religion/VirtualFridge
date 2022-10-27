@@ -50,13 +50,13 @@ public class MappingController {
     }
 
     @GetMapping("/user")
-    public User getUser(@RequestBody User user
+    public Collection<User> getUser(@RequestBody User user
     ){
         return getPostgresUserManager().getUser(user);
     }
 
     @PutMapping("/user")
-    public User putUser(@RequestBody User user
+    public Collection<User> putUser(@RequestBody User user
     ){
         return getPostgresUserManager().getUser(user);
     }
