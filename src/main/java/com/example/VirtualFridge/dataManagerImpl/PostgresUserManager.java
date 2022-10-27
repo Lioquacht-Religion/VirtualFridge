@@ -69,6 +69,7 @@ public class PostgresUserManager implements UserManager {
         return users;
     }
 
+    //TODO: FIX does not work
     //@Override
     public User getUser(User user) {
 
@@ -85,13 +86,12 @@ public class PostgresUserManager implements UserManager {
                     "' AND email = '" + user.getEmail() +
                     "' AND password = '" + user.getPassword() + "';"
             );
-            while(rs.next()) {
+            rs.next();
                 r_user = new User(
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password")
                 );
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
