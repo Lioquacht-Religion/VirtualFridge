@@ -80,14 +80,15 @@ public class PostgresUserManager implements UserManager {
         try {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
+            String getUser =
+                    "SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass'";
             //SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass';
-            ResultSet rs = stmt.executeQuery(
-                   "SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass'"
+            ResultSet rs = stmt.executeQuery(getUser);
+                   //"SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass'"
                     /*"SELECT * FROM users WHERE " +
                     "name = '" + user.getName() +
                     "' AND email = '" + user.getEmail() +
                     "' AND password = '" + user.getPassword() + "'"*/
-            );
             //FLO DU HUND HAHA
             while(rs.next()) {
                 r_user.add( new User(
