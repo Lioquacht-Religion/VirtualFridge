@@ -86,6 +86,7 @@ public class PostgresUserManager implements UserManager {
                     "' AND email = '" + user.getEmail() +
                     "' AND password = '" + user.getPassword() + "';"
             );
+            //FLO DU HUND HAHA
             rs.next();
                 r_user = new User(
                         rs.getString("name"),
