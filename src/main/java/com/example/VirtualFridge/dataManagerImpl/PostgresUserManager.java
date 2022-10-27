@@ -168,7 +168,7 @@ public class PostgresUserManager implements UserManager {
             e.printStackTrace();
         }
 
-        return user.getEmail();
+        return "changed userstuff: " + user.getEmail();
 
     }
 
@@ -226,6 +226,46 @@ public class PostgresUserManager implements UserManager {
                     "password varchar(100) NOT NULL)";
             stmt.executeUpdate(createTable);
             System.out.println("user Table created");
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        try{
+            stmt.close();
+            connection.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void createTableStorage() {
+
+        // Be carefull: It deletes data if table already exists.
+        //
+        System.out.println("Starting to create new storage Table");
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            System.out.println("getting datasource");
+
+            String dropTable = "DROP TABLE IF EXISTS storages";
+            stmt.executeUpdate(dropTable);
+
+            System.out.println("creating storage Table");
+
+            String createTable = "CREATE TABLE storages (" +
+                    "id SERIAL PRIMARY KEY, " +
+                    "name varchar(100) NOT NULL, " +
+                    "User int NOT NULL, " +
+                    "FOREIGN KEY (User) REFERENCES users(id)";
+            stmt.executeUpdate(createTable);
+            System.out.println("storage Table created");
 
         }
         catch(SQLException e){

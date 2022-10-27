@@ -60,6 +60,7 @@ public class MappingController {
         return getPostgresUserManager().getUser("email", email);
     }
 
+    //TODO: Fix
     @PutMapping(path= "/user",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
@@ -104,6 +105,20 @@ public class MappingController {
         getPostgresUserManager().deleteUser(user);
 
         return user.getEmail();
+    }
+
+    @PostMapping(
+            path = "/storage/createtable"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createStorageTable() {
+        Logger.getLogger("Test").log(Level.INFO, "Start Post create Table");
+
+        final PostgresUserManager postgresUserManager =
+                getPostgresUserManager();
+        postgresUserManager.createTableStorage();
+
+        return "Database Storage Table created";
     }
 
 
