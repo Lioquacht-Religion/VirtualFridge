@@ -5,13 +5,17 @@ import com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager;
 import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
 import com.example.VirtualFridge.model.UserList;
+import com.example.VirtualFridge.model.alexa.OutputSpeechRO;
+import com.example.VirtualFridge.model.alexa.ResponseRO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import com.example.VirtualFridge.model.alexa.AlexaRO;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -117,5 +121,61 @@ public class MappingController {
         return "Database Storage Table created";
     }
 
+
+    @PostMapping(
+            path = "/alexa",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public AlexaRO getTasks(@RequestBody AlexaRO alexaRO) {
+
+        if(alexaRO.getRequest().getType().equalsIgnoreCase("LaunchRequest")){
+            return prepareResponse(alexaRO, "Welcome to the Virtual Fridge", false);
+        }
+
+        if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
+                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("TaskReadIntent"))){
+            StringBuilder outText  = new StringBuilder("");
+        //TODO: UserList zu passender Grocery Liste ändern
+            /*try {
+                Storage storage = new Storage(getPostgresUserManager().getUser("email", "klaus@mail.com")));
+                storage.setGroceries();
+                AtomicInteger i = new AtomicInteger(0);
+                storage.getGroceries().forEach(
+                        groceries -> {
+                            outText.append("Task number " + i.incrementAndGet() + "is: ");
+                            outText.append(groceries.getName() + " and has priority " + groceries.getUnit() + ". " + groceries.getAount());
+                        }
+                );
+                outText.append("Thank you for using our service");
+            }
+            catch (Exception e){
+                outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
+            }
+*/
+            return
+                    prepareResponse(alexaRO, outText.toString(), true);
+        }
+        return prepareResponse(alexaRO, "We could not help you", true);
+
+
+        //String outText = "";
+
+
+        //return alexaRO;
+    }
+
+    private AlexaRO prepareResponse(AlexaRO alexaRO, String outText, boolean shouldEndSession) {
+
+        alexaRO.setRequest(null);
+        alexaRO.setSession(null);
+        alexaRO.setContext(null);
+        OutputSpeechRO outputSpeechRO = new OutputSpeechRO();
+        outputSpeechRO.setType("PlainText");
+        outputSpeechRO.setText(outText);
+        ResponseRO response = new ResponseRO(outputSpeechRO, shouldEndSession);
+        alexaRO.setResponse(response);
+        return alexaRO;
+    }
 
 }
