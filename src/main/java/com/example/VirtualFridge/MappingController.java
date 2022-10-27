@@ -53,6 +53,7 @@ public class MappingController {
             path= "/user",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
+    @ResponseStatus(HttpStatus.OK)
     public Collection<User> getUser(@RequestBody User user
     ){
         return getPostgresUserManager().getUser(user);
