@@ -260,10 +260,10 @@ public class PostgresUserManager implements UserManager {
             System.out.println("creating storage Table");
 
             String createTable = "CREATE TABLE storages (" +
-                    "id SERIAL PRIMARY KEY, " +
+                    "StorageId SERIAL PRIMARY KEY, " +
                     "name varchar(100) NOT NULL, " +
-                    "User int NOT NULL, " +
-                    "FOREIGN KEY (User) REFERENCES users(id))";
+                    "Owner int NOT NULL, " +
+                    "FOREIGN KEY (Owner) REFERENCES users(id))";
             stmt.executeUpdate(createTable);
             System.out.println("storage Table created");
 
