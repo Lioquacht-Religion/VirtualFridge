@@ -49,7 +49,10 @@ public class MappingController {
         //return userList;
     }
 
-    @GetMapping("/user")
+    @GetMapping(
+            path= "/user",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
     public Collection<User> getUser(@RequestBody User user
     ){
         return getPostgresUserManager().getUser(user);
