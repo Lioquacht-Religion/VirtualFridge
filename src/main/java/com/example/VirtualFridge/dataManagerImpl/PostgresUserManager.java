@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,7 +73,7 @@ public class PostgresUserManager implements UserManager {
     //@Override
     public Collection<User> getUser(User user) {
 
-        Collection<User> r_user = new ArrayList<>();
+        Collection<User> r_user = new ArrayList<User>();
         Statement stmt = null;
         Connection connection = null;
 
@@ -82,17 +81,20 @@ public class PostgresUserManager implements UserManager {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
             //SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass';
-            ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE " +
-                    "name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass'"
+            ResultSet rs = stmt.executeQuery(
+                   "SELECT * FROM users WHERE name = 'Klaus Riec' AND email = 'klauser@mail.com' AND password = 'wordpass'"
+                    /*"SELECT * FROM users WHERE " +
+                    "name = '" + user.getName() +
+                    "' AND email = '" + user.getEmail() +
+                    "' AND password = '" + user.getPassword() + "'"*/
             );
             //FLO DU HUND HAHA
-            while (rs.next()) {
+            while(rs.next()) {
                 r_user.add( new User(
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password")
                 ));
-               // System.out.println(r_user.getEmail());
             }
         } catch (SQLException e) {
             e.printStackTrace();
