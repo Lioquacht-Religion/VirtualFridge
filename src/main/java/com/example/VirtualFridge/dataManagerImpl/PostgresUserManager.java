@@ -281,4 +281,47 @@ public class PostgresUserManager implements UserManager {
 
 
     }
+
+    public void createTableGroceries() {
+
+        // Be carefull: It deletes data if table already exists.
+        //
+        System.out.println("Starting to create new groceries Table");
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            System.out.println("getting datasource");
+
+            String dropTable = "DROP TABLE IF EXISTS groceries";
+            stmt.executeUpdate(dropTable);
+
+            System.out.println("creating groceries Table");
+
+            String createTable = "CREATE TABLE groceries (" +
+                    "GroceryId SERIAL PRIMARY KEY, " +
+                    "name varchar(100) NOT NULL, " +
+                    "amount int, " +
+                    "unit varchar(50)," +
+                    "StoredIn int NOT NULL, " +
+                    "FOREIGN KEY (StoredIn) REFERENCES storages(StorageId))";
+            stmt.executeUpdate(createTable);
+            System.out.println("groceries Table created");
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        try{
+            stmt.close();
+            connection.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 }

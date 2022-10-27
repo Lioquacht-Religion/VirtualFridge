@@ -121,6 +121,20 @@ public class MappingController {
         return "Database Storage Table created";
     }
 
+    @PostMapping(
+            path = "/storage/createtable"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createGroceriesTable() {
+        //Logger.getLogger("Test").log(Level.INFO, "Start Post create Table");
+
+        final PostgresUserManager postgresUserManager =
+                getPostgresUserManager();
+        postgresUserManager.createTableGroceries();
+
+        return "Database Storage Table created";
+    }
+
 
     @PostMapping(
             path = "/alexa",
