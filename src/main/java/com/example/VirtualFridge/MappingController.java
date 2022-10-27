@@ -122,7 +122,7 @@ public class MappingController {
     }
 
     @PostMapping(
-            path = "/storage/createtable"
+            path = "/groceries/createtable"
     )
     @ResponseStatus(HttpStatus.OK)
     public String createGroceriesTable() {
