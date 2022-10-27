@@ -115,7 +115,7 @@ public class MappingController {
     public String createStorage(@RequestBody Storage storage){
         //getPropertyFileUserManager("src/main/resources/user.properties").addUser(user);
         getPostgresUserManager().addStorage(storage);
-        return "posted user with email " + storage.getName();
+        return "posted storage: " + storage.getName();
     }
 
     @PostMapping(

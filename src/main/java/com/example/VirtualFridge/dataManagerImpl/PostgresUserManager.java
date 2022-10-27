@@ -337,7 +337,7 @@ public class PostgresUserManager implements UserManager {
             String getStorOwnerId = "(SELECT id FROM users WHERE email = '" + storage.getOwner().getEmail() + "')";
             String udapteSQL = "INSERT into storages (name, Owner) VALUES (" +
                     "'" + storage.getName() + "', " +
-                    "'" + getStorOwnerId + "')";
+                    getStorOwnerId + ")";
 
             stmt.executeUpdate(udapteSQL);
 
