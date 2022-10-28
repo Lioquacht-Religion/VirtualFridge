@@ -154,18 +154,18 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public AlexaRO getTasks(@RequestBody AlexaRO alexaRO) {
+    public AlexaRO getGroceries(@RequestBody AlexaRO alexaRO) {
 
         if(alexaRO.getRequest().getType().equalsIgnoreCase("LaunchRequest")){
             return prepareResponse(alexaRO, "Welcome to the Virtual Fridge", false);
         }
 
         if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
-                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("TaskReadIntent"))){
+                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("ReadGroceriesIntent"))){
             StringBuilder outText  = new StringBuilder("");
         //TODO: UserList zu passender Grocery Liste ändern
             /*try {
-                Storage storage = new Storage(getPostgresUserManager().getUser("email", "klaus@mail.com")));
+                Storage storage = new Storage(getPostgresUserManager().getUser("name", "klaus@mail.com")), getPostgresUserManager().getUser("email", "klaus@mail.com")));
                 storage.setGroceries();
                 AtomicInteger i = new AtomicInteger(0);
                 storage.getGroceries().forEach(
