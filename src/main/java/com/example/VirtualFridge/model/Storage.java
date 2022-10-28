@@ -8,7 +8,7 @@ public class Storage {
     private User Owner;
     private Collection<Grocery> Groceries = new LinkedList<Grocery>();
 
-    Storage(String name, User Owner){
+    public Storage(String name, User Owner){
         this.name = name; this.Owner = Owner;
     }
 

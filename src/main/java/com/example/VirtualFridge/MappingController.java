@@ -178,8 +178,8 @@ public class MappingController {
             }
             catch (Exception e){
                 outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
-            }
-*/
+            }*/
+
             return
                     prepareResponse(alexaRO, outText.toString(), true);
         }
