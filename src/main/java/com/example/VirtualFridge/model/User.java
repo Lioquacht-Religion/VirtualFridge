@@ -27,12 +27,12 @@ public class User {
         this.password = password;
     }
 
-    public User(int ID, String name, String email, String password){
+   /* public User(int ID, String name, String email, String password){
         this.ID = ID;
         this.name = name;
         this.email = email;
         this.password = password;
-    }
+    }*/
 
     public int getID() {
         return ID;

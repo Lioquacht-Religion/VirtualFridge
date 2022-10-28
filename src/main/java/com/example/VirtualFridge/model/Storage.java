@@ -18,8 +18,12 @@ public class Storage {
         this.name = name; this.Owner = Owner;
     }
 
-    public Storage(int ownerID, int storageID, String name, User Owner){
+    /*public Storage(int ownerID, int storageID, String name, User Owner){
         this.ownerID = ownerID; this.storageID = storageID; this.name = name; this.Owner = Owner;
+    }*/
+
+    public void setIDs(int ownerID, int storageID){
+        this.ownerID = ownerID; this.storageID = storageID;
     }
 
     public int getOwnerID() {

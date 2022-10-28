@@ -88,11 +88,11 @@ public class PostgresUserManager implements UserManager {
 
             if(rs.next()) {
                 r_user = new User(
-                        rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password")
                 );
+                r_user.setID(rs.getInt("id"));
             }
             else{ r_user = new User("notFound", "404", "BOB");}
 
@@ -377,11 +377,11 @@ public class PostgresUserManager implements UserManager {
 
             if(rs.next()) {
                 storage = new Storage(
-                        rs.getInt("owner"),
-                        rs.getInt("storageid"),
                         rs.getString("name"),
                         Owner
                 );
+                storage.setIDs(  rs.getInt("owner"),
+                        rs.getInt("storageid") );
             }
         } catch (SQLException e) {
             e.printStackTrace();
