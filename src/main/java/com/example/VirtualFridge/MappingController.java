@@ -2,6 +2,7 @@ package com.example.VirtualFridge;
 
 import com.example.VirtualFridge.dataManagerImpl.PostgresUserManager;
 import com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager;
+import com.example.VirtualFridge.model.Grocery;
 import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
 import com.example.VirtualFridge.model.UserList;
@@ -55,7 +56,7 @@ public class MappingController {
 
     @GetMapping("/user/email"
     )
-    public Collection<User> getUser(@RequestParam String email
+    public User getUser(@RequestParam String email
     ){
         return getPostgresUserManager().getUser("email", email);
     }
@@ -133,6 +134,22 @@ public class MappingController {
     }
 
     @PostMapping(
+            path = "/grocery",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createStorage(@RequestParam String storName,
+                                @RequestParam String ownerEmail,
+                                @RequestBody Grocery grocery){
+        //getPropertyFileUserManager("src/main/resources/user.properties").addUser(user);
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        User owner = PostgresManager.getUser("email", ownerEmail);
+        Storage storage = PostgresManager.getStorage(storName, owner);
+        getPostgresUserManager().addGrocery(storage, grocery);
+        return "posted grocery: " + grocery.getName() + "into Storage: " + storage.getName();
+    }
+
+    @PostMapping(
             path = "/groceries/createtable"
     )
     @ResponseStatus(HttpStatus.OK)
@@ -164,7 +181,8 @@ public class MappingController {
                 (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("TaskReadIntent"))){
             StringBuilder outText  = new StringBuilder("");
         //TODO: UserList zu passender Grocery Liste ändern
-            /*try {
+            /*
+            try {
                 Storage storage = new Storage(getPostgresUserManager().getUser("email", "klaus@mail.com")));
                 storage.setGroceries();
                 AtomicInteger i = new AtomicInteger(0);
@@ -178,8 +196,10 @@ public class MappingController {
             }
             catch (Exception e){
                 outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
-            }*/
+            }
 
+
+             */
             return
                     prepareResponse(alexaRO, outText.toString(), true);
         }

@@ -18,10 +18,28 @@ public class User {
 
     private String name = "Std", email = "", password = "";
 
+
+    private int ID = -1;
+
     public User(String name, String email, String password){
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User(int ID, String name, String email, String password){
+        this.ID = ID;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getName() {
