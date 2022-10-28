@@ -138,7 +138,7 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public String createStorage(@RequestParam String storName,
+    public String createGrocery(@RequestParam String storName,
                                 @RequestParam String ownerEmail,
                                 @RequestBody Grocery grocery){
         //getPropertyFileUserManager("src/main/resources/user.properties").addUser(user);
@@ -147,6 +147,18 @@ public class MappingController {
         Storage storage = PostgresManager.getStorage(storName, owner);
         getPostgresUserManager().addGrocery(storage, grocery);
         return "posted grocery: " + grocery.getName() + "into Storage: " + storage.getName();
+    }
+
+    @GetMapping("/user/storage/grocery/all"
+    )
+    public Collection<Grocery> getStorageGroceries(@RequestParam String storName,
+                                    @RequestParam String ownerEmail
+    ){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        User owner = PostgresManager.getUser("email", ownerEmail);
+        Storage storage = PostgresManager.getStorage(storName, owner);
+        return PostgresManager.getGroceries(storage.getStorageID());
     }
 
     @PostMapping(

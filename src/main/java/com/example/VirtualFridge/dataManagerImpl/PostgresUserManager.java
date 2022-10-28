@@ -432,5 +432,42 @@ public class PostgresUserManager implements UserManager {
 
     }
 
+    public Collection<Grocery> getGroceries(int storageID) {
+
+        Collection<Grocery> groceries = new ArrayList<Grocery>();
+        Statement stmt = null;
+        Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            //String getStorOwnerId = "(SELECT id FROM users WHERE email = '" + Owner.getEmail() + "')";
+            String getGroceries =
+                    "SELECT * FROM groceries WHERE storedin = '" + storageID + "'";
+
+            ResultSet rs = stmt.executeQuery(getGroceries);
+
+            while(rs.next()) {
+                groceries.add( new Grocery(
+                        rs.getString("name"),
+                        rs.getString("unit"),
+                        rs.getInt("amount")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return groceries;
+    }
+
 
 }
