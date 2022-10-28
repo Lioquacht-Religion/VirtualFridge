@@ -6,7 +6,7 @@ public class Grocery {
     private int amount = 0;
 
 
-    Grocery(String name, String unit, int amount){
+    public Grocery(String name, String unit, int amount){
         this.name = name;
         this.unit = unit;
         this.amount = amount;

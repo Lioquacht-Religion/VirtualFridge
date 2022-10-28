@@ -2,6 +2,7 @@ package com.example.VirtualFridge;
 
 import com.example.VirtualFridge.dataManagerImpl.PostgresUserManager;
 import com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager;
+import com.example.VirtualFridge.model.Grocery;
 import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
 import com.example.VirtualFridge.model.UserList;
@@ -55,7 +56,7 @@ public class MappingController {
 
     @GetMapping("/user/email"
     )
-    public Collection<User> getUser(@RequestParam String email
+    public User getUser(@RequestParam String email
     ){
         return getPostgresUserManager().getUser("email", email);
     }
@@ -133,6 +134,34 @@ public class MappingController {
     }
 
     @PostMapping(
+            path = "/grocery",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createGrocery(@RequestParam String storName,
+                                @RequestParam String ownerEmail,
+                                @RequestBody Grocery grocery){
+        //getPropertyFileUserManager("src/main/resources/user.properties").addUser(user);
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        User owner = PostgresManager.getUser("email", ownerEmail);
+        Storage storage = PostgresManager.getStorage(storName, owner);
+        getPostgresUserManager().addGrocery(storage, grocery);
+        return "posted grocery: " + grocery.getName() + "into Storage: " + storage.getName();
+    }
+
+    @GetMapping("/user/storage/grocery/all"
+    )
+    public Collection<Grocery> getStorageGroceries(@RequestParam String storName,
+                                    @RequestParam String ownerEmail
+    ){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        User owner = PostgresManager.getUser("email", ownerEmail);
+        Storage storage = PostgresManager.getStorage(storName, owner);
+        return PostgresManager.getGroceries(storage.getStorageID());
+    }
+
+    @PostMapping(
             path = "/groceries/createtable"
     )
     @ResponseStatus(HttpStatus.OK)
@@ -154,18 +183,19 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public AlexaRO getGroceries(@RequestBody AlexaRO alexaRO) {
+    public AlexaRO getTasks(@RequestBody AlexaRO alexaRO) {
 
         if(alexaRO.getRequest().getType().equalsIgnoreCase("LaunchRequest")){
             return prepareResponse(alexaRO, "Welcome to the Virtual Fridge", false);
         }
 
         if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
-                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("ReadGroceriesIntent"))){
+                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("TaskReadIntent"))){
             StringBuilder outText  = new StringBuilder("");
         //TODO: UserList zu passender Grocery Liste ändern
-            /*try {
-                Storage storage = new Storage(getPostgresUserManager().getUser("name", "klaus@mail.com")), getPostgresUserManager().getUser("email", "klaus@mail.com")));
+            /*
+            try {
+                Storage storage = new Storage(getPostgresUserManager().getUser("email", "klaus@mail.com")));
                 storage.setGroceries();
                 AtomicInteger i = new AtomicInteger(0);
                 storage.getGroceries().forEach(
@@ -178,8 +208,10 @@ public class MappingController {
             }
             catch (Exception e){
                 outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
-            }*/
+            }
 
+
+             */
             return
                     prepareResponse(alexaRO, outText.toString(), true);
         }

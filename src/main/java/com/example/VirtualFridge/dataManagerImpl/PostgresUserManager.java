@@ -1,6 +1,7 @@
 package com.example.VirtualFridge.dataManagerImpl;
 
 import com.example.VirtualFridge.dataManager.UserManager;
+import com.example.VirtualFridge.model.Grocery;
 import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -70,11 +71,10 @@ public class PostgresUserManager implements UserManager {
         return users;
     }
 
-    //TODO: FIX does not work
     //@Override
-    public Collection<User> getUser(String attToSearch, String attribute) {
+    public User getUser(String attToSearch, String attribute) {
 
-        Collection<User> r_user = new ArrayList<User>();
+        User r_user = new User("notFound", "404", "BOB");
         Statement stmt = null;
         Connection connection = null;
 
@@ -86,13 +86,16 @@ public class PostgresUserManager implements UserManager {
 
             ResultSet rs = stmt.executeQuery(getUser);
 
-            while(rs.next()) {
-                r_user.add( new User(
+            if(rs.next()) {
+                r_user = new User(
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password")
-                ));
+                );
+                r_user.setID(rs.getInt("id"));
             }
+            else{ r_user = new User("notFound", "404", "BOB");}
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -356,5 +359,115 @@ public class PostgresUserManager implements UserManager {
         return storage.getName();
 
     }
+
+    public Storage getStorage(String storName, User Owner) {
+
+        Storage storage = new Storage("notFound", Owner);
+        Statement stmt = null;
+        Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String getStorOwnerId = "(SELECT id FROM users WHERE email = '" + Owner.getEmail() + "')";
+            String getUser =
+                    "SELECT * FROM storages WHERE name = '" + storName + "' AND owner = " + getStorOwnerId;
+
+            ResultSet rs = stmt.executeQuery(getUser);
+
+            if(rs.next()) {
+                storage = new Storage(
+                        rs.getString("name"),
+                        Owner
+                );
+                storage.setIDs(  rs.getInt("owner"),
+                        rs.getInt("storageid") );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return storage;
+    }
+
+    public String addGrocery(Storage storage, Grocery grocery) {
+
+        Statement stmt = null;
+        Connection connection = null;
+
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String getStorOwnerId = "(SELECT id FROM users WHERE email = '" + storage.getOwner().getEmail() + "')";
+            String udapteSQL = "INSERT into groceries (name, amount, unit, storedin) VALUES (" +
+                    "'" + grocery.getName() + "', " +
+                    "'" + grocery.getAmount() + "', " +
+                    "'" + grocery.getUnit() + "', " +
+                    "'" + storage.getStorageID()  + "')";
+
+            stmt.executeUpdate(udapteSQL);
+
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return storage.getName();
+
+    }
+
+    public Collection<Grocery> getGroceries(int storageID) {
+
+        Collection<Grocery> groceries = new ArrayList<Grocery>();
+        Statement stmt = null;
+        Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            //String getStorOwnerId = "(SELECT id FROM users WHERE email = '" + Owner.getEmail() + "')";
+            String getGroceries =
+                    "SELECT * FROM groceries WHERE storedin = '" + storageID + "'";
+
+            ResultSet rs = stmt.executeQuery(getGroceries);
+
+            while(rs.next()) {
+                groceries.add( new Grocery(
+                        rs.getString("name"),
+                        rs.getString("unit"),
+                        rs.getInt("amount")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return groceries;
+    }
+
 
 }
