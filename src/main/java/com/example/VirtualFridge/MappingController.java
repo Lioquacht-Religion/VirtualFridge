@@ -63,7 +63,8 @@ public class MappingController {
 
     //TODO: Fix
     @PutMapping(path= "/user",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
     public String putUser(@RequestBody User user
