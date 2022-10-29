@@ -178,32 +178,27 @@ public class PostgresUserManager implements UserManager {
 
     public void deleteUser(User user){
 
-        Statement stmt = null;
-        Connection connection = null;
+        Statement stmt = null; Connection connection = null;
         try{
-            connection = basicDataSource.getConnection();
-            stmt = connection.createStatement();
+            connection = basicDataSource.getConnection(); stmt = connection.createStatement();
+
+            String deleteGroceries = "DELETE FROM groceries WHERE " +
+                    "storedin IN  (SELECT storageid FROM storages WHERE owner = " + user.getID() + "));";
+            String deleteStorages = "DELETE FROM storages WHERE " +
+                    "owner = " + user.getID() + ";";
 
             System.out.println("delete User");
 
             String deleteUser = "DELETE FROM users WHERE " +
-                    "email = '" + user.getEmail() + "';";
+                    "email = '" + user.getEmail() + " AND password = '" + user.getPassword() +"';";
             stmt.executeUpdate(deleteUser);
             System.out.println("user Table created");
 
         }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
+        catch(SQLException e){e.printStackTrace();}
 
-        try{
-            stmt.close();
-            connection.close();
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-
-
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
     }
 
     public void createTableUser() {
@@ -396,6 +391,50 @@ public class PostgresUserManager implements UserManager {
 
 
         return storage;
+    }
+
+    public String deleteStorage(int userID, int storageID){
+
+        Statement stmt = null; Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection(); stmt = connection.createStatement();
+
+            System.out.println("delete Storage and its groceries");
+
+            String deleteStorage = "DELETE FROM storages WHERE " +
+                    "storageid = " + storageID + " AND owner = " + userID;
+            stmt.executeUpdate(deleteStorage);
+
+            String deleteStorageGroc = "DELETE FROM groceries WHERE " +
+                    "storedin = " + storageID;
+            stmt.executeUpdate(deleteStorageGroc);
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+        return "delete Storage and its groceries";
+    }
+
+    public String deleteGrocery(int storageID, int groceryID){
+
+        Statement stmt = null; Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection(); stmt = connection.createStatement();
+
+            System.out.println("delete Grocery from Storage");
+
+            String deleteStorageGroc = "DELETE FROM groceries WHERE " +
+                    "storedin = " + storageID + "AND groceryid = " + groceryID;
+            stmt.executeUpdate(deleteStorageGroc);
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+        return "delete Grocery from Storage";
     }
 
     public String addGrocery(Storage storage, Grocery grocery) {

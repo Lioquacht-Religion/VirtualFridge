@@ -87,7 +87,7 @@ public class MappingController {
     }
 
 
-    @GetMapping("/user/Storage/all")
+    @GetMapping("/user/storage/all")
     public LinkedList<Storage> getUserStorages(){
 
         return new LinkedList<Storage>();
@@ -106,6 +106,18 @@ public class MappingController {
         getPostgresUserManager().deleteUser(user);
 
         return user.getEmail();
+    }
+
+    @DeleteMapping(path="/storage")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteStorage(@RequestParam int userID, @RequestParam int storageID){
+        return getPostgresUserManager().deleteStorage(userID, storageID);
+    }
+
+    @DeleteMapping(path="/grocery")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteGrocery(@RequestParam int storageID, @RequestParam int groceryID){
+        return getPostgresUserManager().deleteGrocery(storageID, groceryID);
     }
 
     @PostMapping(
