@@ -205,15 +205,17 @@ public class MappingController {
                 (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("TaskReadIntent"))){
             StringBuilder outText  = new StringBuilder("");
         //TODO: UserList zu passender Grocery Liste ändern
-            /*
+
             try {
-                Storage storage = new Storage(getPostgresUserManager().getUser("email", "klaus@mail.com")));
+                Storage storage = getPostgresUserManager().getStorage("Lager1",
+                        getPostgresUserManager().getUser("email", "klaus@mail.com"));
                 storage.setGroceries();
                 AtomicInteger i = new AtomicInteger(0);
                 storage.getGroceries().forEach(
                         groceries -> {
                             outText.append("Task number " + i.incrementAndGet() + "is: ");
-                            outText.append(groceries.getName() + " and has priority " + groceries.getUnit() + ". " + groceries.getAount());
+                            outText.append(groceries.getName() + " and has priority " +
+                                    groceries.getUnit() + ". " + groceries.getAmount());
                         }
                 );
                 outText.append("Thank you for using our service");
@@ -223,7 +225,7 @@ public class MappingController {
             }
 
 
-             */
+
             return
                     prepareResponse(alexaRO, outText.toString(), true);
         }

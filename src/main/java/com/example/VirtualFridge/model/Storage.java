@@ -3,6 +3,8 @@ package com.example.VirtualFridge.model;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import static com.example.VirtualFridge.dataManagerImpl.PostgresUserManager.getPostgresUserManager;
+
 public class Storage {
     private String name = "Standard-Lager";
     private User Owner;
@@ -59,7 +61,7 @@ public class Storage {
     }
 
     public void setGroceries() {
-        ;
+       Groceries = getPostgresUserManager().getGroceries(getStorageID());
     }
 
 }
