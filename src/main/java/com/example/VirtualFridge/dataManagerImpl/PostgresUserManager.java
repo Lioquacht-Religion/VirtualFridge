@@ -152,7 +152,7 @@ public class PostgresUserManager implements UserManager {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
             String udapteSQL =
-                    "UPDATE users" +
+                    "UPDATE users " +
                             "SET name = '" + user.getName() + "', email= '" + user.getEmail() +"', password='"
                             + user.getPassword() + "' " +
                             "WHERE email = '" + user.getEmail() +"'";

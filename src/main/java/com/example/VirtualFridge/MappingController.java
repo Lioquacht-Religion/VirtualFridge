@@ -93,6 +93,14 @@ public class MappingController {
         return new LinkedList<Storage>();
     }
 
+    @GetMapping("/storage")
+    @ResponseStatus(HttpStatus.OK)
+    public Storage getStorage(@RequestParam String storName, @RequestParam String email){
+
+        return getPostgresUserManager().getStorage(storName,
+                getPostgresUserManager().getUser("email", email));
+    }
+
     @DeleteMapping(
             path="/user",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE
