@@ -204,7 +204,7 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public AlexaRO getTasks(@RequestBody AlexaRO alexaRO) {
+    public AlexaRO getGroceries(@RequestBody AlexaRO alexaRO) {
 
         if(alexaRO.getRequest().getType().equalsIgnoreCase("LaunchRequest")){
             return prepareResponse(alexaRO, "Welcome to the Virtual Fridge", false);
@@ -220,12 +220,12 @@ public class MappingController {
                         getPostgresUserManager().getUser("email", "klaus@mail.com"));
                 storage.setIDs(9, 1);
                 storage.setGroceries();
-                AtomicInteger i = new AtomicInteger(0);
+                //AtomicInteger i = new AtomicInteger(0);
                 storage.getGroceries().forEach(
                         groceries -> {
-                            outText.append("Task number " + i.incrementAndGet() + "is: ");
-                            outText.append(groceries.getName() + " and has priority " +
-                                    groceries.getUnit() + ". " + groceries.getAmount());
+                            outText.append("Storage contains: ");
+                            outText.append(groceries.getName() + " with the amount: " +
+                                    groceries.getAmount() + " " + groceries.getUnit());
                         }
                 );
                 outText.append("Thank you for using our service");
