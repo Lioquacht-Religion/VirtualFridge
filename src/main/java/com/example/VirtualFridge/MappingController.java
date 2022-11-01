@@ -218,6 +218,7 @@ public class MappingController {
             try {
                 Storage storage = getPostgresUserManager().getStorage("Lager1",
                         getPostgresUserManager().getUser("email", "klaus@mail.com"));
+                storage.setIDs(9, 1);
                 storage.setGroceries();
                 AtomicInteger i = new AtomicInteger(0);
                 storage.getGroceries().forEach(
