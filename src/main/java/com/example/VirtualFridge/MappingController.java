@@ -223,7 +223,7 @@ public class MappingController {
                 //AtomicInteger i = new AtomicInteger(0);
                 storage.getGroceries().forEach(
                         groceries -> {
-                            outText.append("Storage contains: ");
+                            outText.append(" Storage contains: ");
                             outText.append(groceries.getName() + " with the amount: " +
                                     groceries.getAmount() + " " + groceries.getUnit());
                         }
