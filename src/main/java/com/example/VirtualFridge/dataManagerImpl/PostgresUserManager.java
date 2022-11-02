@@ -428,13 +428,14 @@ public class PostgresUserManager implements UserManager {
 
             System.out.println("delete Storage and its groceries");
 
+            String deleteStorageGroc = "DELETE FROM groceries WHERE " +
+                    "storedin = " + storageID;
+            stmt.executeUpdate(deleteStorageGroc);
+
             String deleteStorage = "DELETE FROM storages WHERE " +
                     "storageid = " + storageID + " AND owner = " + userID;
             stmt.executeUpdate(deleteStorage);
 
-            String deleteStorageGroc = "DELETE FROM groceries WHERE " +
-                    "storedin = " + storageID;
-            stmt.executeUpdate(deleteStorageGroc);
 
         }
         catch(SQLException e){e.printStackTrace();}
