@@ -89,9 +89,10 @@ public class MappingController {
 
 
     @GetMapping("/user/storage/all")
-    public LinkedList<Storage> getUserStorages(){
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Storage> getUserStorages(@RequestParam int OwnerID){
 
-        return new LinkedList<Storage>();
+        return getPostgresUserManager().getStorages(OwnerID);
     }
 
     @GetMapping("/storage")

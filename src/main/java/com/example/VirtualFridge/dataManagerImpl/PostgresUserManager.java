@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PostgresUserManager implements UserManager {
@@ -48,13 +49,13 @@ public class PostgresUserManager implements UserManager {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM users");
             while (rs.next()) {
-                users.add(
-                        new User(
-                                rs.getString("name"),
-                                rs.getString("email"),
-                                rs.getString("password")
-                        )
+                User l_u = new User(
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password")
                 );
+                l_u.setID(rs.getInt("id"));
+                users.add(l_u);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -353,6 +354,30 @@ public class PostgresUserManager implements UserManager {
 
         return storage.getName();
 
+    }
+
+    public Collection<Storage> getStorages(int OwnerID) {
+        Collection<Storage>  storage= new LinkedList<>();
+        Statement stmt = null;Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String getStorages =
+                    "SELECT * FROM storages WHERE owner = " + OwnerID;
+
+            ResultSet rs = stmt.executeQuery(getStorages);
+
+            while(rs.next()) {
+                Storage l_stor = new Storage(
+                        rs.getString("name"),
+                        new User("", "", ""));
+            }
+        } catch (SQLException e) {e.printStackTrace();}
+
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        return storage;
     }
 
     public Storage getStorage(String storName, User Owner) {
