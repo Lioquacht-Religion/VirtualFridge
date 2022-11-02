@@ -2,10 +2,7 @@ package com.example.VirtualFridge;
 
 import com.example.VirtualFridge.dataManagerImpl.PostgresUserManager;
 import com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager;
-import com.example.VirtualFridge.model.Grocery;
-import com.example.VirtualFridge.model.Storage;
-import com.example.VirtualFridge.model.User;
-import com.example.VirtualFridge.model.UserList;
+import com.example.VirtualFridge.model.*;
 import com.example.VirtualFridge.model.alexa.OutputSpeechRO;
 import com.example.VirtualFridge.model.alexa.ResponseRO;
 import org.springframework.http.HttpStatus;
@@ -212,6 +209,44 @@ public class MappingController {
         return "Database Recipes Table created";
     }
 
+    @PostMapping(
+            path = "/recipe",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createRecipe(@RequestBody Recipe recipe, @RequestParam String OwnerID){
+        getPostgresUserManager().addRecipe(Integer.parseInt(OwnerID), recipe);
+        return "posted recipe: " + recipe.getName();
+    }
+
+    @PostMapping(
+            path = "/recipe/ingredient",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createIngredient(@RequestBody Grocery ingredient, @RequestParam String RecipeID){
+        getPostgresUserManager().addIngredient(Integer.parseInt(RecipeID), ingredient);
+        return "posted ingredient: " + ingredient.getName();
+    }
+
+    @PutMapping(path= "/recipe/ingredient",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String putIngredient(@RequestBody Grocery ingredient
+    ){
+        getPostgresUserManager().putIngredient(ingredient);
+        return "updated User: " + ingredient.getName();
+    }
+
+    @GetMapping("/recipe/ingredient/all"
+    )
+    public Collection<Grocery> getRecipeGroceries(@RequestParam String recipeID){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        return PostgresManager.getAllIngredients(Integer.parseInt(recipeID));
+    }
 
 
 

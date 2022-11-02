@@ -2,6 +2,7 @@ package com.example.VirtualFridge.dataManagerImpl;
 
 import com.example.VirtualFridge.dataManager.UserManager;
 import com.example.VirtualFridge.model.Grocery;
+import com.example.VirtualFridge.model.Recipe;
 import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -382,13 +383,13 @@ public class PostgresUserManager implements UserManager {
             stmt = connection.createStatement();
             String dropTable = "DROP TABLE IF EXISTS User_rel_Recipe";
             stmt.executeUpdate(dropTable);
-            String createTable = "CREATE TABLE User_rel_Recipe (" +
+            /*String createTable = "CREATE TABLE User_rel_Recipe (" +
                     "CONSTRAINT u_rel_rID PRIMARY KEY (owner, recipeOf), " +
                     "owner int NOT NULL, " +
                     "recipeOf int NOT NULL, " +
                     "FOREIGN KEY (owner) REFERENCES users(id)," +
                     "FOREIGN KEY (recipeOf) REFERENCES recipes(RecipeId))";
-            stmt.executeUpdate(createTable);
+            stmt.executeUpdate(createTable);*/
             System.out.println("rel Table created");
 
         }
@@ -397,14 +398,97 @@ public class PostgresUserManager implements UserManager {
         }catch(SQLException e){e.printStackTrace();}
     }
 
+    public String addRecipe(int initUser, Recipe recipe) {
+        Statement stmt = null; Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL = "INSERT into recipes (name, description, Owner) VALUES (" +
+                    "'" + recipe.getName() + "', '" +
+                    recipe.getDescription() + "', " +
+                    initUser +")";
+            stmt.executeUpdate(udapteSQL);
+
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();} catch (SQLException e) {e.printStackTrace();}
+
+        return recipe.getName();
+
+    }
+
+    public String addIngredient(int RecipeID, Grocery ingredient) {
+        Statement stmt = null; Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL = "INSERT into ingredients (name, amount, unit, partOfRecipe) VALUES (" +
+                    "'" + ingredient.getName() + "', " +
+                    ingredient.getAmount() + ", " +
+                    "'" + ingredient.getUnit() + "', " +
+                    RecipeID +")";
+            stmt.executeUpdate(udapteSQL);
+
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();} catch (SQLException e) {e.printStackTrace();}
+
+        return ingredient.getName();
+
+    }
+
+    public String putIngredient(Grocery ingredient) {
+        Statement stmt = null;Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL =
+                    "UPDATE ingredients " +
+                            "SET name = '" + ingredient.getName() + "', amount = " + ingredient.getAmount() +", unit ='"
+                            + ingredient.getUnit() + "' " +
+                            "WHERE IngredientId = " + ingredient.getID();
+
+            stmt.executeUpdate(udapteSQL);
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return "changed ingredientstuff: " + ingredient.getName();
+
+    }
+
+    public Collection<Grocery> getAllIngredients(int recipeID) {
+
+        List<Grocery> ingredients = new LinkedList<>();
+        Statement stmt = null;Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ingredients WHERE partOfRecipe =" + recipeID);
+            while (rs.next()) {
+                Grocery l_ing = new Grocery(
+                        rs.getString("name"),
+                        rs.getString("unit"),
+                        rs.getInt("amount")
+                );
+                l_ing.setID(rs.getInt("id"));
+                ingredients.add(l_ing);
+            }
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return ingredients;
+    }
+
 
 
     public String addStorage(Storage storage) {
 
         Statement stmt = null;
         Connection connection = null;
-
-
         try {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
@@ -415,20 +499,12 @@ public class PostgresUserManager implements UserManager {
 
             stmt.executeUpdate(udapteSQL);
 
-            stmt.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            stmt.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
 
         return storage.getName();
-
     }
 
     public Collection<Storage> getStorages(int OwnerID) {

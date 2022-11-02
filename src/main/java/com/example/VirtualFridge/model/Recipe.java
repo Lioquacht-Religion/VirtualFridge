@@ -34,10 +34,20 @@ public class Recipe {
 
     private String description = "Standard Text";
 
-    private int recipeID = -1,
-    ownerID = -1;
+    public int getRecipeID() {
+        return recipeID;
+    }
 
-    private User Owner;
+    public void setRecipeID(int recipeID) {
+        this.recipeID = recipeID;
+    }
+
+    private int recipeID = -1,
+    authorID = -1;
+
+    private User Author;
+
+    //Consider adding author attribute
 
     public Recipe(){
 
