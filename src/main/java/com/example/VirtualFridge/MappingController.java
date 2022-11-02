@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import static com.example.VirtualFridge.dataManagerImpl.PostgresUserManager.getPostgresUserManager;
 import static com.example.VirtualFridge.dataManagerImpl.PropertyFileUserManager.getPropertyFileUserManager;
+import static java.lang.Integer.parseInt;
 
 //TODO: CHange all propertyfilemanager zu postgres
 
@@ -90,9 +91,9 @@ public class MappingController {
 
     @GetMapping("/user/storage/all")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<Storage> getUserStorages(@RequestParam int OwnerID){
+    public Collection<Storage> getUserStorages(@RequestParam String OwnerID){
 
-        return getPostgresUserManager().getStorages(OwnerID);
+        return getPostgresUserManager().getStorages(parseInt(OwnerID));
     }
 
     @GetMapping("/storage")
