@@ -198,6 +198,20 @@ public class MappingController {
         return "Database Groceries Table created";
     }
 
+    @PostMapping(
+            path = "/recipe/createtable"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createRecipeTable() {
+        final PostgresUserManager postgresUserManager =
+                getPostgresUserManager();
+        postgresUserManager.createTableUser_rel_Recipe();
+        postgresUserManager.createTableRecipes();
+        postgresUserManager.createTableIngredients();
+
+        return "Database Recipes Table created";
+    }
+
 
 
 

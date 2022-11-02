@@ -324,6 +324,81 @@ public class PostgresUserManager implements UserManager {
 
     }
 
+    public void createTableRecipes() {
+        System.out.println("Starting to create new Recipe Table");
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String dropTable = "DROP TABLE IF EXISTS recipes";
+            stmt.executeUpdate(dropTable);
+            String createTable = "CREATE TABLE recipes (" +
+                    "RecipeId SERIAL PRIMARY KEY, " +
+                    "name varchar(100) NOT NULL, " +
+                    "description varchar(5000) NOT NULL, " +
+                    "Owner int NOT NULL, " +
+                    "FOREIGN KEY (Owner) REFERENCES users(id))";
+            stmt.executeUpdate(createTable);
+            System.out.println("recipe Table created");
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+    }
+
+    public void createTableIngredients() {
+        System.out.println("Starting to create new Ingredient Table");
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String dropTable = "DROP TABLE IF EXISTS ingredients";
+            stmt.executeUpdate(dropTable);
+            String createTable = "CREATE TABLE ingredients (" +
+                    "IngredientId SERIAL PRIMARY KEY, " +
+                    "name varchar(100) NOT NULL, " +
+                    "amount int, " +
+                    "unit varchar(50)," +
+                    "partOfRecipe int NOT NULL, " +
+                    "FOREIGN KEY (partOfRecipe) REFERENCES recipes(RecipeId))";
+            stmt.executeUpdate(createTable);
+            System.out.println("ingredient Table created");
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+    }
+
+    public void createTableUser_rel_Recipe() {
+        System.out.println("Starting to create new rel Table");
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String dropTable = "DROP TABLE IF EXISTS User_rel_Recipe";
+            stmt.executeUpdate(dropTable);
+            String createTable = "CREATE TABLE User_rel_Recipe (" +
+                    "CONSTRAINT u_rel_rID PRIMARY KEY (movie_id, category_id), " +
+                    "owner int NOT NULL, " +
+                    "recipeOf int NOT NULL, " +
+                    "FOREIGN KEY (owner) REFERENCES users(id)," +
+                    "FOREIGN KEY (recipeOf) REFERENCES recipes(RecipeId))";
+            stmt.executeUpdate(createTable);
+            System.out.println("rel Table created");
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+    }
+
+
+
     public String addStorage(Storage storage) {
 
         Statement stmt = null;
