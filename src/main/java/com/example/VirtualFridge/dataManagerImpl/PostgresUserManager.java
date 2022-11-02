@@ -383,7 +383,7 @@ public class PostgresUserManager implements UserManager {
             String dropTable = "DROP TABLE IF EXISTS User_rel_Recipe";
             stmt.executeUpdate(dropTable);
             String createTable = "CREATE TABLE User_rel_Recipe (" +
-                    "CONSTRAINT u_rel_rID PRIMARY KEY (movie_id, category_id), " +
+                    "CONSTRAINT u_rel_rID PRIMARY KEY (owner, recipeOf), " +
                     "owner int NOT NULL, " +
                     "recipeOf int NOT NULL, " +
                     "FOREIGN KEY (owner) REFERENCES users(id)," +
