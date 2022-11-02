@@ -372,6 +372,8 @@ public class PostgresUserManager implements UserManager {
                 Storage l_stor = new Storage(
                         rs.getString("name"),
                         new User("", "", ""));
+                l_stor.setIDs( OwnerID, rs.getInt("storageid") );
+                storage.add(l_stor);
             }
         } catch (SQLException e) {e.printStackTrace();}
 
