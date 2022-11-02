@@ -49,8 +49,8 @@ public class Recipe {
 
     //Consider adding author attribute
 
-    public Recipe(){
-
+    public Recipe(String name, String description){
+        this.name = name; this.description= description;
     }
 
 }
