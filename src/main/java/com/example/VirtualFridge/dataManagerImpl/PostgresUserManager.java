@@ -507,7 +507,7 @@ public class PostgresUserManager implements UserManager {
                         rs.getString("unit"),
                         rs.getInt("amount")
                 );
-                l_ing.setID(rs.getInt("id"));
+                l_ing.setID(rs.getInt("ingredientid"));
                 ingredients.add(l_ing);
             }
         } catch (SQLException e) {e.printStackTrace();}
