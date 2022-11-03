@@ -256,6 +256,18 @@ public class MappingController {
         return PostgresManager.getAllRecipes(Integer.parseInt(userID));
     }
 
+    @DeleteMapping(path="/recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteRecipe(@RequestParam String userID ,@RequestParam String recipeID){
+        return getPostgresUserManager().deleteRecipe(Integer.parseInt(userID), Integer.parseInt(recipeID));
+    }
+
+    @DeleteMapping(path="/ingredient")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteIngredient(@RequestParam String recipeID, @RequestParam String ingredientID){
+        return getPostgresUserManager().deleteIngredient(Integer.parseInt(recipeID), Integer.parseInt(ingredientID));
+    }
+
 
 
     @PostMapping(

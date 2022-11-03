@@ -189,10 +189,19 @@ public class PostgresUserManager implements UserManager {
             String deleteStorages = "DELETE FROM storages WHERE " +
                     "owner = " + user.getID() + ";";
 
+            String deleteIngredients = "DELETE FROM ingredients WHERE " +
+                    "partofrecipe IN  (SELECT recipeid FROM recipes WHERE owner = " + user.getID() + "));";
+            String deleteRecipes = "DELETE FROM recipes WHERE " +
+                    "owner = " + user.getID() + ";";
+
             System.out.println("delete User");
 
             String deleteUser = "DELETE FROM users WHERE " +
                     "email = '" + user.getEmail() + " AND password = '" + user.getPassword() +"';";
+            stmt.executeUpdate(deleteGroceries);
+            stmt.executeUpdate(deleteStorages);
+            stmt.executeUpdate(deleteIngredients);
+            stmt.executeUpdate(deleteRecipes);
             stmt.executeUpdate(deleteUser);
             System.out.println("user Table created");
 
@@ -507,6 +516,53 @@ public class PostgresUserManager implements UserManager {
 
         return ingredients;
     }
+
+
+    public String deleteRecipe(int userID, int recipeID){
+
+        Statement stmt = null; Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection(); stmt = connection.createStatement();
+
+            System.out.println("delete Recipe and its ingredients");
+
+            String deleteStorageGroc = "DELETE FROM ingredients WHERE " +
+                    "partofrecipe = " + recipeID;
+            stmt.executeUpdate(deleteStorageGroc);
+
+            String deleteStorage = "DELETE FROM recipes WHERE " +
+                    "partofrecipe = " + recipeID + " AND owner = " + userID;
+            stmt.executeUpdate(deleteStorage);
+
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+        return "delete recipe and its ingredients";
+    }
+
+    public String deleteIngredient(int storageID, int groceryID){
+
+        Statement stmt = null; Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection(); stmt = connection.createStatement();
+
+            System.out.println("delete ingredient from recipe");
+
+            String deleteStorageGroc = "DELETE FROM recipes WHERE " +
+                    "partofrecipe = " + storageID + "AND ingredientid = " + groceryID;
+            stmt.executeUpdate(deleteStorageGroc);
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+        return "delete ingredient from recipe";
+    }
+
 
 
 
