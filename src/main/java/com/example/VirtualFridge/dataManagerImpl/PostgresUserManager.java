@@ -417,6 +417,31 @@ public class PostgresUserManager implements UserManager {
 
     }
 
+    public Collection<Recipe> getAllRecipes(int userID) {
+
+        List<Recipe> recipes = new LinkedList<>();
+        Statement stmt = null;Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM recipes WHERE Owner = " + userID);
+            while (rs.next()) {
+                Recipe l_rec = new Recipe(
+                        rs.getString("name"),
+                        rs.getString("description")
+                );
+                l_rec.setRecipeID(rs.getInt("RecipeId"));
+                l_rec.setAuthorID(rs.getInt("Owner"));
+                recipes.add(l_rec);
+            }
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return recipes;
+    }
+
     public String addIngredient(int RecipeID, Grocery ingredient) {
         Statement stmt = null; Connection connection = null;
         try {

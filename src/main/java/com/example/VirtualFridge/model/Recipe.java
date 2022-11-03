@@ -42,8 +42,17 @@ public class Recipe {
         this.recipeID = recipeID;
     }
 
-    private int recipeID = -1,
-    authorID = -1;
+    private int recipeID = -1;
+
+    public int getAuthorID() {
+        return authorID;
+    }
+
+    public void setAuthorID(int authorID) {
+        this.authorID = authorID;
+    }
+
+    private int authorID = -1;
 
     private User Author;
 

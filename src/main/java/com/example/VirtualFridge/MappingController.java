@@ -202,9 +202,9 @@ public class MappingController {
     public String createRecipeTable() {
         final PostgresUserManager postgresUserManager =
                 getPostgresUserManager();
-        postgresUserManager.createTableUser_rel_Recipe();
-        postgresUserManager.createTableRecipes();
+        //postgresUserManager.createTableUser_rel_Recipe();
         postgresUserManager.createTableIngredients();
+        postgresUserManager.createTableRecipes();
 
         return "Database Recipes Table created";
     }
@@ -246,6 +246,14 @@ public class MappingController {
 
         final PostgresUserManager PostgresManager = getPostgresUserManager();
         return PostgresManager.getAllIngredients(Integer.parseInt(recipeID));
+    }
+
+    @GetMapping("/recipe/all"
+    )
+    public Collection<Recipe> getRecipes(@RequestParam String userID){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        return PostgresManager.getAllRecipes(Integer.parseInt(userID));
     }
 
 
