@@ -531,7 +531,7 @@ public class PostgresUserManager implements UserManager {
             stmt.executeUpdate(deleteStorageGroc);
 
             String deleteStorage = "DELETE FROM recipes WHERE " +
-                    "partofrecipe = " + recipeID + " AND owner = " + userID;
+                    "recipeid = " + recipeID + " AND owner = " + userID;
             stmt.executeUpdate(deleteStorage);
 
 
@@ -551,7 +551,7 @@ public class PostgresUserManager implements UserManager {
 
             System.out.println("delete ingredient from recipe");
 
-            String deleteStorageGroc = "DELETE FROM recipes WHERE " +
+            String deleteStorageGroc = "DELETE FROM ingredients WHERE " +
                     "partofrecipe = " + storageID + "AND ingredientid = " + groceryID;
             stmt.executeUpdate(deleteStorageGroc);
 
