@@ -760,11 +760,13 @@ public class PostgresUserManager implements UserManager {
             ResultSet rs = stmt.executeQuery(getGroceries);
 
             while(rs.next()) {
-                groceries.add( new Grocery(
+                 Grocery l_groc = new Grocery(
                         rs.getString("name"),
                         rs.getString("unit"),
                         rs.getInt("amount")
-                ));
+                );
+                 l_groc.setIDs(rs.getInt("groceryid"), storageID);
+                 groceries.add(l_groc);
             }
         } catch (SQLException e) {
             e.printStackTrace();
