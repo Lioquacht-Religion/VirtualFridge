@@ -182,14 +182,13 @@ public class MappingController {
 
     @GetMapping("/storage/grocery/all"
     )
-    public Collection<Grocery> getStorageGroceries(@RequestParam String storageID
+    public Collection<Grocery> getStorageGroceriesByID(@RequestParam String storageID
     ){
 
         final PostgresUserManager PostgresManager = getPostgresUserManager();
         return PostgresManager.getGroceries(Integer.parseInt(storageID));
     }
 
-    /*
 
     @GetMapping("/user/storage/grocery/all"
     )
@@ -202,8 +201,6 @@ public class MappingController {
         Storage storage = PostgresManager.getStorage(storName, owner);
         return PostgresManager.getGroceries(storage.getStorageID());
     }
-
- */
 
 
     @PostMapping(
