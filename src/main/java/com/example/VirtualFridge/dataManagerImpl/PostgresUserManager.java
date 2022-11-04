@@ -2,6 +2,7 @@ package com.example.VirtualFridge.dataManagerImpl;
 
 import com.example.VirtualFridge.dataManager.UserManager;
 import com.example.VirtualFridge.model.Grocery;
+import com.example.VirtualFridge.model.Recipe;
 import com.example.VirtualFridge.model.Storage;
 import com.example.VirtualFridge.model.User;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -188,10 +189,19 @@ public class PostgresUserManager implements UserManager {
             String deleteStorages = "DELETE FROM storages WHERE " +
                     "owner = " + user.getID() + ";";
 
+            String deleteIngredients = "DELETE FROM ingredients WHERE " +
+                    "partofrecipe IN  (SELECT recipeid FROM recipes WHERE owner = " + user.getID() + "));";
+            String deleteRecipes = "DELETE FROM recipes WHERE " +
+                    "owner = " + user.getID() + ";";
+
             System.out.println("delete User");
 
             String deleteUser = "DELETE FROM users WHERE " +
                     "email = '" + user.getEmail() + " AND password = '" + user.getPassword() +"';";
+            stmt.executeUpdate(deleteGroceries);
+            stmt.executeUpdate(deleteStorages);
+            stmt.executeUpdate(deleteIngredients);
+            stmt.executeUpdate(deleteRecipes);
             stmt.executeUpdate(deleteUser);
             System.out.println("user Table created");
 
@@ -324,12 +334,242 @@ public class PostgresUserManager implements UserManager {
 
     }
 
+    public void createTableRecipes() {
+        System.out.println("Starting to create new Recipe Table");
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String dropTable = "DROP TABLE IF EXISTS recipes";
+            stmt.executeUpdate(dropTable);
+            String createTable = "CREATE TABLE recipes (" +
+                    "RecipeId SERIAL PRIMARY KEY, " +
+                    "name varchar(100) NOT NULL, " +
+                    "description varchar(5000) NOT NULL, " +
+                    "Owner int NOT NULL, " +
+                    "FOREIGN KEY (Owner) REFERENCES users(id))";
+            stmt.executeUpdate(createTable);
+            System.out.println("recipe Table created");
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+    }
+
+    public void createTableIngredients() {
+        System.out.println("Starting to create new Ingredient Table");
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String dropTable = "DROP TABLE IF EXISTS ingredients";
+            stmt.executeUpdate(dropTable);
+            String createTable = "CREATE TABLE ingredients (" +
+                    "IngredientId SERIAL PRIMARY KEY, " +
+                    "name varchar(100) NOT NULL, " +
+                    "amount int, " +
+                    "unit varchar(50)," +
+                    "partOfRecipe int NOT NULL, " +
+                    "FOREIGN KEY (partOfRecipe) REFERENCES recipes(RecipeId))";
+            stmt.executeUpdate(createTable);
+            System.out.println("ingredient Table created");
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+    }
+
+    public void createTableUser_rel_Recipe() {
+        System.out.println("Starting to create new rel Table");
+        Statement stmt = null;
+        Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String dropTable = "DROP TABLE IF EXISTS User_rel_Recipe";
+            stmt.executeUpdate(dropTable);
+            /*String createTable = "CREATE TABLE User_rel_Recipe (" +
+                    "CONSTRAINT u_rel_rID PRIMARY KEY (owner, recipeOf), " +
+                    "owner int NOT NULL, " +
+                    "recipeOf int NOT NULL, " +
+                    "FOREIGN KEY (owner) REFERENCES users(id)," +
+                    "FOREIGN KEY (recipeOf) REFERENCES recipes(RecipeId))";
+            stmt.executeUpdate(createTable);*/
+            System.out.println("rel Table created");
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+    }
+
+    public String addRecipe(int initUser, Recipe recipe) {
+        Statement stmt = null; Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL = "INSERT into recipes (name, description, Owner) VALUES (" +
+                    "'" + recipe.getName() + "', '" +
+                    recipe.getDescription() + "', " +
+                    initUser +")";
+            stmt.executeUpdate(udapteSQL);
+
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();} catch (SQLException e) {e.printStackTrace();}
+
+        return recipe.getName();
+
+    }
+
+    public Collection<Recipe> getAllRecipes(int userID) {
+
+        List<Recipe> recipes = new LinkedList<>();
+        Statement stmt = null;Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM recipes WHERE Owner = " + userID);
+            while (rs.next()) {
+                Recipe l_rec = new Recipe(
+                        rs.getString("name"),
+                        rs.getString("description")
+                );
+                l_rec.setRecipeID(rs.getInt("RecipeId"));
+                l_rec.setAuthorID(rs.getInt("Owner"));
+                recipes.add(l_rec);
+            }
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return recipes;
+    }
+
+    public String addIngredient(int RecipeID, Grocery ingredient) {
+        Statement stmt = null; Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL = "INSERT into ingredients (name, amount, unit, partOfRecipe) VALUES (" +
+                    "'" + ingredient.getName() + "', " +
+                    ingredient.getAmount() + ", " +
+                    "'" + ingredient.getUnit() + "', " +
+                    RecipeID +")";
+            stmt.executeUpdate(udapteSQL);
+
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();} catch (SQLException e) {e.printStackTrace();}
+
+        return ingredient.getName();
+
+    }
+
+    public String putIngredient(Grocery ingredient) {
+        Statement stmt = null;Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL =
+                    "UPDATE ingredients " +
+                            "SET name = '" + ingredient.getName() + "', amount = " + ingredient.getAmount() +", unit ='"
+                            + ingredient.getUnit() + "' " +
+                            "WHERE IngredientId = " + ingredient.getID();
+
+            stmt.executeUpdate(udapteSQL);
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return "changed ingredientstuff: " + ingredient.getName();
+
+    }
+
+    public Collection<Grocery> getAllIngredients(int recipeID) {
+
+        List<Grocery> ingredients = new LinkedList<>();
+        Statement stmt = null;Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ingredients WHERE partOfRecipe =" + recipeID);
+            while (rs.next()) {
+                Grocery l_ing = new Grocery(
+                        rs.getString("name"),
+                        rs.getString("unit"),
+                        rs.getInt("amount")
+                );
+                l_ing.setID(rs.getInt("ingredientid"));
+                ingredients.add(l_ing);
+            }
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return ingredients;
+    }
+
+
+    public String deleteRecipe(int userID, int recipeID){
+
+        Statement stmt = null; Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection(); stmt = connection.createStatement();
+
+            System.out.println("delete Recipe and its ingredients");
+
+            String deleteStorageGroc = "DELETE FROM ingredients WHERE " +
+                    "partofrecipe = " + recipeID;
+            stmt.executeUpdate(deleteStorageGroc);
+
+            String deleteStorage = "DELETE FROM recipes WHERE " +
+                    "recipeid = " + recipeID + " AND owner = " + userID;
+            stmt.executeUpdate(deleteStorage);
+
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+        return "delete recipe and its ingredients";
+    }
+
+    public String deleteIngredient(int storageID, int groceryID){
+
+        Statement stmt = null; Connection connection = null;
+        try{
+            connection = basicDataSource.getConnection(); stmt = connection.createStatement();
+
+            System.out.println("delete ingredient from recipe");
+
+            String deleteStorageGroc = "DELETE FROM ingredients WHERE " +
+                    "partofrecipe = " + storageID + "AND ingredientid = " + groceryID;
+            stmt.executeUpdate(deleteStorageGroc);
+
+        }
+        catch(SQLException e){e.printStackTrace();}
+
+        try{stmt.close();connection.close();
+        }catch(SQLException e){e.printStackTrace();}
+        return "delete ingredient from recipe";
+    }
+
+
+
+
     public String addStorage(Storage storage) {
 
         Statement stmt = null;
         Connection connection = null;
-
-
         try {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
@@ -340,20 +580,12 @@ public class PostgresUserManager implements UserManager {
 
             stmt.executeUpdate(udapteSQL);
 
-            stmt.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            stmt.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
 
         return storage.getName();
-
     }
 
     public Collection<Storage> getStorages(int OwnerID) {
@@ -428,13 +660,14 @@ public class PostgresUserManager implements UserManager {
 
             System.out.println("delete Storage and its groceries");
 
+            String deleteStorageGroc = "DELETE FROM groceries WHERE " +
+                    "storedin = " + storageID;
+            stmt.executeUpdate(deleteStorageGroc);
+
             String deleteStorage = "DELETE FROM storages WHERE " +
                     "storageid = " + storageID + " AND owner = " + userID;
             stmt.executeUpdate(deleteStorage);
 
-            String deleteStorageGroc = "DELETE FROM groceries WHERE " +
-                    "storedin = " + storageID;
-            stmt.executeUpdate(deleteStorageGroc);
 
         }
         catch(SQLException e){e.printStackTrace();}
