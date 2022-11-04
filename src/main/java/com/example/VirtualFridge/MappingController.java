@@ -170,17 +170,17 @@ public class MappingController {
     }
 
     @PostMapping(
-            path = "/grocery",
+            path = "/grocery/byID",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public String createGrocery(@RequestParam String storageID,
+    public String createGroceryByID(@RequestParam String storageID,
                                 @RequestBody Grocery grocery){
         getPostgresUserManager().addGrocery(Integer.parseInt(storageID), grocery);
         return "posted grocery: " + grocery.getName() + "into Storage: " + storageID;
     }
 
-    @GetMapping("/storage/grocery/all"
+    @GetMapping("/storage/grocery/byID/all"
     )
     public Collection<Grocery> getStorageGroceriesByID(@RequestParam String storageID
     ){
