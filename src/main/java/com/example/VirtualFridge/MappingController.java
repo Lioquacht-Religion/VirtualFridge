@@ -364,10 +364,10 @@ public class MappingController {
         if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
                 (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("ChooseGroceriesIntent"))){
             StringBuilder outText  = new StringBuilder("");
+            outText.append("es geht");
+            /*try {
 
-            try {
-                outText.append("es geht");
-                /*Storage storage = getPostgresUserManager().getStorage("Lager1",
+                Storage storage = getPostgresUserManager().getStorage("Lager1",
                         getPostgresUserManager().getUser("email", "klaus@mail.com"));
                 storage.setIDs(9, 1);
                 storage.setGroceries();
@@ -378,12 +378,12 @@ public class MappingController {
                             outText.append(groceries.getName() + " with the amount: " +
                                     groceries.getAmount() + " " + groceries.getUnit());
                         }
-                );*/
+                )
                 outText.append("Thank you for using our service");
             }
             catch (Exception e){
                 outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
-            }
+            };*/
 
 
 
