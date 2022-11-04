@@ -169,6 +169,17 @@ public class MappingController {
         return "posted grocery: " + grocery.getName() + "into Storage: " + storage.getName();
     }
 
+    @PostMapping(
+            path = "/grocery",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createGrocery(@RequestParam String storageID,
+                                @RequestBody Grocery grocery){
+        getPostgresUserManager().addGrocery(Integer.parseInt(storageID), grocery);
+        return "posted grocery: " + grocery.getName() + "into Storage: " + storageID;
+    }
+
     @GetMapping("/user/storage/grocery/all"
     )
     public Collection<Grocery> getStorageGroceries(@RequestParam String storName,
@@ -180,6 +191,16 @@ public class MappingController {
         Storage storage = PostgresManager.getStorage(storName, owner);
         return PostgresManager.getGroceries(storage.getStorageID());
     }
+
+    @GetMapping("/storage/grocery/all"
+    )
+    public Collection<Grocery> getStorageGroceries(@RequestParam String storageID
+    ){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        return PostgresManager.getGroceries(Integer.parseInt(storageID));
+    }
+
 
     @PostMapping(
             path = "/groceries/createtable"
