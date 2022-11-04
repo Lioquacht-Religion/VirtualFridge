@@ -355,12 +355,33 @@ public class MappingController {
                 outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
             }*/
 
-            if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
-                    (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("ChooseGroceriesIntent"))){
-                StringBuilder outText1  = new StringBuilder("");
-                outText1.append("es geht");
-            /*try {
 
+
+            return
+                    prepareResponse(alexaRO, outText.toString(), true);
+        }
+
+        return prepareResponse(alexaRO, "We could not help you", true);
+
+
+        //String outText = "";
+
+
+        //return alexaRO;
+    }
+
+    public AlexaRO chooseGroceries(@RequestBody AlexaRO alexaRO) {
+
+        if(alexaRO.getRequest().getType().equalsIgnoreCase("LaunchRequest")){
+            return prepareResponse(alexaRO, "Welcome to the Virtual Fridge", false);
+        }
+
+        if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
+                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("ChooseGroceriesIntent"))){
+            StringBuilder outText  = new StringBuilder("");
+
+            outText.append("es geht?");
+            /*try {
                 Storage storage = getPostgresUserManager().getStorage("Lager1",
                         getPostgresUserManager().getUser("email", "klaus@mail.com"));
                 storage.setIDs(9, 1);
@@ -372,23 +393,18 @@ public class MappingController {
                             outText.append(groceries.getName() + " with the amount: " +
                                     groceries.getAmount() + " " + groceries.getUnit());
                         }
-                )
+                );
                 outText.append("Thank you for using our service");
             }
             catch (Exception e){
                 outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
-            };*/
+            }*/
 
 
-
-                /*return
-                        prepareResponse(alexaRO, outText.toString(), true);*/
-            }
 
             return
                     prepareResponse(alexaRO, outText.toString(), true);
         }
-
 
         return prepareResponse(alexaRO, "We could not help you", true);
 
@@ -398,6 +414,9 @@ public class MappingController {
 
         //return alexaRO;
     }
+
+
+
 
     private AlexaRO prepareResponse(AlexaRO alexaRO, String outText, boolean shouldEndSession) {
 
