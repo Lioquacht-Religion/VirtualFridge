@@ -355,16 +355,10 @@ public class MappingController {
                 outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
             }*/
 
-
-
-            return
-                    prepareResponse(alexaRO, outText.toString(), true);
-        }
-
-        else if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
-                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("ChooseGroceriesIntent"))){
-            StringBuilder outText  = new StringBuilder("");
-            outText.append("es geht");
+            if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
+                    (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("ChooseGroceriesIntent"))){
+                StringBuilder outText1  = new StringBuilder("");
+                outText1.append("es geht");
             /*try {
 
                 Storage storage = getPostgresUserManager().getStorage("Lager1",
@@ -387,9 +381,14 @@ public class MappingController {
 
 
 
+                /*return
+                        prepareResponse(alexaRO, outText.toString(), true);*/
+            }
+
             return
                     prepareResponse(alexaRO, outText.toString(), true);
         }
+
 
         return prepareResponse(alexaRO, "We could not help you", true);
 
