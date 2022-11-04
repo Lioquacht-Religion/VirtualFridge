@@ -180,6 +180,17 @@ public class MappingController {
         return "posted grocery: " + grocery.getName() + "into Storage: " + storageID;
     }
 
+    @GetMapping("/storage/grocery/all"
+    )
+    public Collection<Grocery> getStorageGroceries(@RequestParam String storageID
+    ){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        return PostgresManager.getGroceries(Integer.parseInt(storageID));
+    }
+
+    /*
+
     @GetMapping("/user/storage/grocery/all"
     )
     public Collection<Grocery> getStorageGroceries(@RequestParam String storName,
@@ -192,14 +203,7 @@ public class MappingController {
         return PostgresManager.getGroceries(storage.getStorageID());
     }
 
-    @GetMapping("/storage/grocery/all"
-    )
-    public Collection<Grocery> getStorageGroceries(@RequestParam String storageID
-    ){
-
-        final PostgresUserManager PostgresManager = getPostgresUserManager();
-        return PostgresManager.getGroceries(Integer.parseInt(storageID));
-    }
+ */
 
 
     @PostMapping(
