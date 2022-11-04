@@ -340,6 +340,60 @@ public class MappingController {
         //return alexaRO;
     }
 
+
+    @PostMapping(
+            path = "/alexa/postskill",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public AlexaRO setGroceries(@RequestBody AlexaRO alexaRO) {
+
+        if(alexaRO.getRequest().getType().equalsIgnoreCase("LaunchRequest")){
+            return prepareResponse(alexaRO, "Welcome to the Virtual Fridge", false);
+        }
+
+        if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
+                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("AddGroceriesIntent"))){
+
+            String a = alexaRO.getRequest().getIntent().getName();
+            StringBuilder outText  = new StringBuilder("");
+
+            outText.append(a);
+            /*try {
+                Storage storage = getPostgresUserManager().getStorage("Lager1",
+                        getPostgresUserManager().getUser("email", "klaus@mail.com"));
+                storage.setIDs(9, 1);
+                storage.setGroceries();
+                //AtomicInteger i = new AtomicInteger(0);
+                storage.getGroceries().forEach(
+                        groceries -> {
+                            outText.append(" Storage contains: ");
+                            outText.append(groceries.getName() + " with the amount: " +
+                                    groceries.getAmount() + " " + groceries.getUnit());
+                        }
+                );
+                outText.append("Thank you for using our service");
+            }
+            catch (Exception e){
+                outText.append("Unfortunately, we cannot reach heroku. Our REST server is not responding");
+            }*/
+
+
+
+            return
+                    prepareResponse(alexaRO, outText.toString(), true);
+        }
+
+        return prepareResponse(alexaRO, "We could not help you", true);
+
+
+        //String outText = "";
+
+
+        //return alexaRO;
+    }
+
+
     private AlexaRO prepareResponse(AlexaRO alexaRO, String outText, boolean shouldEndSession) {
 
         alexaRO.setRequest(null);
