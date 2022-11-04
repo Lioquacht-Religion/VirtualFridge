@@ -361,7 +361,7 @@ public class MappingController {
                     prepareResponse(alexaRO, outText.toString(), true);
         }
 
-        if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
+        else if(alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest") &&
                 (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("ChooseGroceriesIntent"))){
             StringBuilder outText  = new StringBuilder("");
             outText.append("es geht");
