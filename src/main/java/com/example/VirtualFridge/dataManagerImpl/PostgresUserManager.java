@@ -804,4 +804,36 @@ public class PostgresUserManager implements UserManager {
     }
 
 
+    public Collection<Recipe> getAllRecipeSuggestions(int userID, int storageID) {
+        Collection<Recipe> recipes = getAllRecipes(userID);
+        Collection<Grocery> storGrocs = getGroceries(storageID);
+        Collection<Recipe> RecipeSugs = new LinkedList<Recipe>();
+
+            for(Recipe r : recipes){
+                Collection<Grocery> rIngs = getAllIngredients(r.getRecipeID());
+                boolean hasAllIng = true;
+                for(Grocery ing : rIngs){
+                    boolean hasIng = false;
+                    for(Grocery stGroc : storGrocs){
+                        if(stGroc.equals(ing) && stGroc.getAmount() > ing.getAmount()){
+                            hasAllIng = true; break; //Ingredient found, break out of storage, search next ing
+                        }
+                        else hasAllIng = false;
+                    }
+
+                    if(!hasAllIng) break; //Ingredient not found, move to next recipe
+                }
+
+                if(hasAllIng) RecipeSugs.add(r);
+
+            }
+
+
+        return RecipeSugs;
+    }
+
+
+
 }
+
+

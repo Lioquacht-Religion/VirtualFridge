@@ -301,6 +301,13 @@ public class MappingController {
         return getPostgresUserManager().deleteIngredient(Integer.parseInt(recipeID), Integer.parseInt(ingredientID));
     }
 
+    @GetMapping("/storage/recipe/suggestion"
+    )
+    public Collection<Recipe> getRecipeSug(@RequestParam String userID, @RequestParam String storageID){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        return PostgresManager.getAllRecipeSuggestions(Integer.parseInt(userID), Integer.parseInt(storageID));
+    }
 
 
     @PostMapping(
