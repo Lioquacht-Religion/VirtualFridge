@@ -169,6 +169,27 @@ public class MappingController {
         return "posted grocery: " + grocery.getName() + "into Storage: " + storage.getName();
     }
 
+    @PostMapping(
+            path = "/grocery/byID",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String createGroceryByID(@RequestParam String storageID,
+                                @RequestBody Grocery grocery){
+        getPostgresUserManager().addGrocery(Integer.parseInt(storageID), grocery);
+        return "posted grocery: " + grocery.getName() + "into Storage: " + storageID;
+    }
+
+    @GetMapping("/storage/grocery/byID/all"
+    )
+    public Collection<Grocery> getStorageGroceriesByID(@RequestParam String storageID
+    ){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        return PostgresManager.getGroceries(Integer.parseInt(storageID));
+    }
+
+
     @GetMapping("/user/storage/grocery/all"
     )
     public Collection<Grocery> getStorageGroceries(@RequestParam String storName,
@@ -180,6 +201,7 @@ public class MappingController {
         Storage storage = PostgresManager.getStorage(storName, owner);
         return PostgresManager.getGroceries(storage.getStorageID());
     }
+
 
     @PostMapping(
             path = "/groceries/createtable"
@@ -227,6 +249,17 @@ public class MappingController {
     public String createIngredient(@RequestBody Grocery ingredient, @RequestParam String RecipeID){
         getPostgresUserManager().addIngredient(Integer.parseInt(RecipeID), ingredient);
         return "posted ingredient: " + ingredient.getName();
+    }
+
+    @PutMapping(path= "/recipe",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String putRecipe(@RequestBody Recipe recipe
+    ){
+        getPostgresUserManager().putRecipe(recipe);
+        return "updated Rezept: " + recipe.getName();
     }
 
     @PutMapping(path= "/recipe/ingredient",

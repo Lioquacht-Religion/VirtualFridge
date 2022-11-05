@@ -471,6 +471,26 @@ public class PostgresUserManager implements UserManager {
 
     }
 
+    public String putRecipe(Recipe recipe) {
+        Statement stmt = null;Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL =
+                    "UPDATE recipes " +
+                            "SET name = '" + recipe.getName() + "', description = '" + recipe.getDescription() +
+                            "' WHERE recipeId = " + recipe.getRecipeID();
+
+            stmt.executeUpdate(udapteSQL);
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return "changed recipestuff: " + recipe.getName();
+
+    }
+
     public String putIngredient(Grocery ingredient) {
         Statement stmt = null;Connection connection = null;
         try {
@@ -614,6 +634,8 @@ public class PostgresUserManager implements UserManager {
         return storage;
     }
 
+
+
     public Storage getStorage(String storName, User Owner) {
 
         Storage storage = new Storage("notFound", Owner);
@@ -697,12 +719,30 @@ public class PostgresUserManager implements UserManager {
         return "delete Grocery from Storage";
     }
 
+    public String addGrocery(int storageID, Grocery grocery) {
+        Statement stmt = null; Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL = "INSERT into groceries (name, amount, unit, storedin) VALUES (" +
+                    "'" + grocery.getName() + "', " +
+                    "" + grocery.getAmount() + ", " +
+                    "'" + grocery.getUnit() + "', " +
+                    "" + storageID  + ")";
+
+            stmt.executeUpdate(udapteSQL);
+
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return grocery.getName();
+    }
+
     public String addGrocery(Storage storage, Grocery grocery) {
-
-        Statement stmt = null;
-        Connection connection = null;
-
-
+        Statement stmt = null; Connection connection = null;
         try {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
@@ -717,18 +757,11 @@ public class PostgresUserManager implements UserManager {
 
             stmt.close();
             connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            stmt.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
 
         return storage.getName();
-
     }
 
     public Collection<Grocery> getGroceries(int storageID) {
@@ -747,11 +780,13 @@ public class PostgresUserManager implements UserManager {
             ResultSet rs = stmt.executeQuery(getGroceries);
 
             while(rs.next()) {
-                groceries.add( new Grocery(
+                 Grocery l_groc = new Grocery(
                         rs.getString("name"),
                         rs.getString("unit"),
                         rs.getInt("amount")
-                ));
+                );
+                 l_groc.setIDs(rs.getInt("groceryid"), storageID);
+                 groceries.add(l_groc);
             }
         } catch (SQLException e) {
             e.printStackTrace();
