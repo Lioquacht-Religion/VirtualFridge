@@ -370,7 +370,7 @@ public class MappingController {
                 List<Recipe> recipes;
                 recipes = (List<Recipe>) getPostgresUserManager().getAllRecipes(9);
                 for(int i = 0; i < recipes.size(); i++){
-                    outText.append("Here are your Recipes: " + recipes.get(i).getName());
+                    outText.append("Recipe list contains: " + recipes.get(i).getName());
 
                 }
 
