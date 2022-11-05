@@ -815,7 +815,7 @@ public class PostgresUserManager implements UserManager {
                 for(Grocery ing : rIngs){
                     boolean hasIng = false;
                     for(Grocery stGroc : storGrocs){
-                        if(stGroc.equals(ing) && stGroc.getAmount() > ing.getAmount()){
+                        if(stGroc.equals(ing) && stGroc.getAmount() >= ing.getAmount()){
                             hasAllIng = true; break; //Ingredient found, break out of storage, search next ing
                         }
                         else hasAllIng = false;
