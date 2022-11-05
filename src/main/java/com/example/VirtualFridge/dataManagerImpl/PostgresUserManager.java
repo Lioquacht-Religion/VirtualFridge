@@ -471,6 +471,26 @@ public class PostgresUserManager implements UserManager {
 
     }
 
+    public String putRecipe(Recipe recipe) {
+        Statement stmt = null;Connection connection = null;
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            String udapteSQL =
+                    "UPDATE recipes " +
+                            "SET name = '" + recipe.getName() + "', description = '" + recipe.getDescription() +
+                            "' WHERE recipeId = " + recipe.getRecipeID();
+
+            stmt.executeUpdate(udapteSQL);
+            stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return "changed recipestuff: " + recipe.getName();
+
+    }
+
     public String putIngredient(Grocery ingredient) {
         Statement stmt = null;Connection connection = null;
         try {

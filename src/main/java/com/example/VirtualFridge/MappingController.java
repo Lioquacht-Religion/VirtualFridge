@@ -251,6 +251,17 @@ public class MappingController {
         return "posted ingredient: " + ingredient.getName();
     }
 
+    @PutMapping(path= "/recipe",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public String putRecipe(@RequestBody Recipe recipe
+    ){
+        getPostgresUserManager().putRecipe(recipe);
+        return "updated Rezept: " + recipe.getName();
+    }
+
     @PutMapping(path= "/recipe/ingredient",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
