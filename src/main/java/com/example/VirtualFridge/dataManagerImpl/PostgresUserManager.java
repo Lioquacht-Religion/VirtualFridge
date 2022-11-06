@@ -826,7 +826,7 @@ public class PostgresUserManager implements UserManager {
                     if(!hasAllIng) break; //Ingredient not found, move to next recipe
                 }
 
-                if(hasAllIng) RecipeSugs.add(r);
+                if(hasAllIng){ r.setIngredients(rIngs); RecipeSugs.add(r); }
 
             }
 
