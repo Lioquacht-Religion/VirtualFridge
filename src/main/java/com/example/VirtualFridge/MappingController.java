@@ -289,6 +289,14 @@ public class MappingController {
         return PostgresManager.getAllRecipes(Integer.parseInt(userID));
     }
 
+    @GetMapping("/recipe/byID"
+    )
+    public Recipe getRecipeByID(@RequestParam String recipeID){
+
+        final PostgresUserManager PostgresManager = getPostgresUserManager();
+        return PostgresManager.getRecipeByID(Integer.parseInt(recipeID));
+    }
+
     @DeleteMapping(path="/recipe")
     @ResponseStatus(HttpStatus.OK)
     public String deleteRecipe(@RequestParam String userID ,@RequestParam String recipeID){

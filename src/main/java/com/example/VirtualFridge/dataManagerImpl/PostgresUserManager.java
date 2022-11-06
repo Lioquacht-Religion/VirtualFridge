@@ -383,29 +383,7 @@ public class PostgresUserManager implements UserManager {
         }catch(SQLException e){e.printStackTrace();}
     }
 
-    public void createTableUser_rel_Recipe() {
-        System.out.println("Starting to create new rel Table");
-        Statement stmt = null;
-        Connection connection = null;
-        try{
-            connection = basicDataSource.getConnection();
-            stmt = connection.createStatement();
-            String dropTable = "DROP TABLE IF EXISTS User_rel_Recipe";
-            stmt.executeUpdate(dropTable);
-            /*String createTable = "CREATE TABLE User_rel_Recipe (" +
-                    "CONSTRAINT u_rel_rID PRIMARY KEY (owner, recipeOf), " +
-                    "owner int NOT NULL, " +
-                    "recipeOf int NOT NULL, " +
-                    "FOREIGN KEY (owner) REFERENCES users(id)," +
-                    "FOREIGN KEY (recipeOf) REFERENCES recipes(RecipeId))";
-            stmt.executeUpdate(createTable);*/
-            System.out.println("rel Table created");
 
-        }
-        catch(SQLException e){e.printStackTrace();}
-        try{stmt.close();connection.close();
-        }catch(SQLException e){e.printStackTrace();}
-    }
 
     public String addRecipe(int initUser, Recipe recipe) {
         Statement stmt = null; Connection connection = null;
@@ -451,6 +429,30 @@ public class PostgresUserManager implements UserManager {
         return recipes;
     }
 
+    public Recipe getRecipeByID(int recipeID) {
+
+        Recipe recipe = new Recipe("404", "error couldnt find recipe to update");
+        Statement stmt = null;Connection connection = null;
+
+        try {
+            connection = basicDataSource.getConnection();
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM recipes WHERE recipeID = " + recipeID);
+            if (rs.next()) {
+                recipe = new Recipe(
+                        rs.getString("name"),
+                        rs.getString("description")
+                );
+                recipe.setRecipeID(rs.getInt("RecipeId"));
+                recipe.setAuthorID(rs.getInt("Owner"));
+            }
+        } catch (SQLException e) {e.printStackTrace();}
+        try {stmt.close();connection.close();
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return recipe;
+    }
+
     public String addIngredient(int RecipeID, Grocery ingredient) {
         Statement stmt = null; Connection connection = null;
         try {
@@ -479,7 +481,7 @@ public class PostgresUserManager implements UserManager {
             String udapteSQL =
                     "UPDATE recipes " +
                             "SET name = '" + recipe.getName() + "', description = '" + recipe.getDescription() +
-                            "' WHERE recipeId = " + recipe.getRecipeID();
+                            "' WHERE recipeid = " + recipe.getRecipeID();
 
             stmt.executeUpdate(udapteSQL);
             stmt.close();connection.close();
