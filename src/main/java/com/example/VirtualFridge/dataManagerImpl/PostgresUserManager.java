@@ -185,12 +185,12 @@ public class PostgresUserManager implements UserManager {
             connection = basicDataSource.getConnection(); stmt = connection.createStatement();
 
             String deleteGroceries = "DELETE FROM groceries WHERE " +
-                    "storedin IN  (SELECT storageid FROM storages WHERE owner = " + user.getID() + "));";
+                    "storedin IN  (SELECT storageid FROM storages WHERE owner = " + user.getID() + ");";
             String deleteStorages = "DELETE FROM storages WHERE " +
                     "owner = " + user.getID() + ";";
 
             String deleteIngredients = "DELETE FROM ingredients WHERE " +
-                    "partofrecipe IN  (SELECT recipeid FROM recipes WHERE owner = " + user.getID() + "));";
+                    "partofrecipe IN  (SELECT recipeid FROM recipes WHERE owner = " + user.getID() + ");";
             String deleteRecipes = "DELETE FROM recipes WHERE " +
                     "owner = " + user.getID() + ";";
 
