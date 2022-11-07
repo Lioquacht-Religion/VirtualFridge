@@ -157,7 +157,7 @@ public class PostgresUserManager implements UserManager {
                     "UPDATE users " +
                             "SET name = '" + user.getName() + "', email = '" + user.getEmail() +"', password ='"
                             + user.getPassword() + "' " +
-                            "WHERE email = '" + user.getEmail() +"'";
+                            "WHERE email = '" + user.getID() +"'";
 
 
             stmt.executeUpdate(udapteSQL);
