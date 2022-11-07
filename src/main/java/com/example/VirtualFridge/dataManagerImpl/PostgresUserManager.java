@@ -197,7 +197,7 @@ public class PostgresUserManager implements UserManager {
             System.out.println("delete User");
 
             String deleteUser = "DELETE FROM users WHERE " +
-                    "email = '" + email + "' AND password = '" + password +"';";
+                    "id =" + userID + "AND email = '" + email + "' AND password = '" + password +"';";
             stmt.executeUpdate(deleteGroceries);
             stmt.executeUpdate(deleteStorages);
             stmt.executeUpdate(deleteIngredients);
