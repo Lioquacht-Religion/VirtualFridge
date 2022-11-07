@@ -178,32 +178,32 @@ public class PostgresUserManager implements UserManager {
 
     }
 
-    public void deleteUser(User user){
+    public void deleteUser(int userID, String email, String password){
 
         Statement stmt = null; Connection connection = null;
         try{
             connection = basicDataSource.getConnection(); stmt = connection.createStatement();
 
             String deleteGroceries = "DELETE FROM groceries WHERE " +
-                    "storedin IN  (SELECT storageid FROM storages WHERE owner = " + user.getID() + ");";
+                    "storedin IN  (SELECT storageid FROM storages WHERE owner = " + userID + ");";
             String deleteStorages = "DELETE FROM storages WHERE " +
-                    "owner = " + user.getID() + ";";
+                    "owner = " + userID + ";";
 
             String deleteIngredients = "DELETE FROM ingredients WHERE " +
-                    "partofrecipe IN  (SELECT recipeid FROM recipes WHERE owner = " + user.getID() + ");";
+                    "partofrecipe IN  (SELECT recipeid FROM recipes WHERE owner = " + userID + ");";
             String deleteRecipes = "DELETE FROM recipes WHERE " +
-                    "owner = " + user.getID() + ";";
+                    "owner = " + userID + ";";
 
             System.out.println("delete User");
 
             String deleteUser = "DELETE FROM users WHERE " +
-                    "email = '" + user.getEmail() + "' AND password = '" + user.getPassword() +"';";
+                    "email = '" + email + "' AND password = '" + password +"';";
             stmt.executeUpdate(deleteGroceries);
             stmt.executeUpdate(deleteStorages);
             stmt.executeUpdate(deleteIngredients);
             stmt.executeUpdate(deleteRecipes);
             stmt.executeUpdate(deleteUser);
-            System.out.println("user Table created");
+            System.out.println("user deleted");
 
         }
         catch(SQLException e){e.printStackTrace();}

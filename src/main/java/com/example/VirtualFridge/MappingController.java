@@ -102,18 +102,17 @@ public class MappingController {
     }
 
     @DeleteMapping(
-            path="/user",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE
-            })
+            path="/user"
+            )
     @ResponseStatus(HttpStatus.OK)
-    public String deleteUser(@RequestBody User user){
+    public String deleteUser(@RequestParam String userID, @RequestParam String email, @RequestParam String password){
         //UserList userList = new UserList();
         //userList.setUsers();
         //userList.deleteUser(user);
         //getPropertyFileUserManager("src/main/resources/user.properties").storeAllUsers(userList.getUsers());
-        getPostgresUserManager().deleteUser(user);
+        getPostgresUserManager().deleteUser(Integer.parseInt(userID), email, password);
 
-        return user.getEmail();
+        return userID;
     }
 
     @DeleteMapping(path="/storage")
