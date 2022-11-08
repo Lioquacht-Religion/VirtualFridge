@@ -343,7 +343,7 @@ public class MappingController {
                         groceries -> {
 
                             outText.append(groceries.getName() + " with the amount: " +
-                                    groceries.getAmount() + " " + groceries.getUnit());
+                                    groceries.getAmount() + " " + groceries.getUnit() + " ");
                         }
                 );
                 outText.append("Thank you for using our service");
@@ -384,8 +384,9 @@ public class MappingController {
             try {
                 List<Recipe> recipes;
                 recipes = (List<Recipe>) getPostgresUserManager().getAllRecipes(106);
+                outText.append("Recipe list contains: ");
                 for(int i = 0; i < recipes.size(); i++){
-                    outText.append("Recipe list contains: " + recipes.get(i).getName());
+                    outText.append(recipes.get(i).getName() + " ");
 
                 }
 
