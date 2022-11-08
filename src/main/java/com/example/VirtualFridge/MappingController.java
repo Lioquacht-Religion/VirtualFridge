@@ -335,7 +335,7 @@ public class MappingController {
             try {
                 Storage storage = getPostgresUserManager().getStorage("Lager1",
                         getPostgresUserManager().getUser("email", "klaus@mail.com"));
-                storage.setIDs(9, 1);
+                storage.setIDs(106, 80);
                 storage.setGroceries();
                 //AtomicInteger i = new AtomicInteger(0);
                 storage.getGroceries().forEach(
@@ -382,7 +382,7 @@ public class MappingController {
 
             try {
                 List<Recipe> recipes;
-                recipes = (List<Recipe>) getPostgresUserManager().getAllRecipes(9);
+                recipes = (List<Recipe>) getPostgresUserManager().getAllRecipes(106);
                 for(int i = 0; i < recipes.size(); i++){
                     outText.append("Recipe list contains: " + recipes.get(i).getName());
 
