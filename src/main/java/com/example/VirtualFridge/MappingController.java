@@ -338,9 +338,10 @@ public class MappingController {
                 storage.setIDs(106, 80);
                 storage.setGroceries();
                 //AtomicInteger i = new AtomicInteger(0);
+                outText.append(" Storage contains: ");
                 storage.getGroceries().forEach(
                         groceries -> {
-                            outText.append(" Storage contains: ");
+
                             outText.append(groceries.getName() + " with the amount: " +
                                     groceries.getAmount() + " " + groceries.getUnit());
                         }
