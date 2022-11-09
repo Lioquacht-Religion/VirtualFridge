@@ -335,14 +335,15 @@ public class MappingController {
             try {
                 Storage storage = getPostgresUserManager().getStorage("Lager1",
                         getPostgresUserManager().getUser("email", "klaus@mail.com"));
-                storage.setIDs(9, 1);
+                storage.setIDs(106, 80);
                 storage.setGroceries();
                 //AtomicInteger i = new AtomicInteger(0);
+                outText.append(" Storage contains: ");
                 storage.getGroceries().forEach(
                         groceries -> {
-                            outText.append(" Storage contains: ");
+
                             outText.append(groceries.getName() + " with the amount: " +
-                                    groceries.getAmount() + " " + groceries.getUnit());
+                                    groceries.getAmount() + " " + groceries.getUnit() + " ");
                         }
                 );
                 outText.append("Thank you for using our service");
@@ -382,9 +383,10 @@ public class MappingController {
 
             try {
                 List<Recipe> recipes;
-                recipes = (List<Recipe>) getPostgresUserManager().getAllRecipes(9);
+                recipes = (List<Recipe>) getPostgresUserManager().getAllRecipes(106);
+                outText.append("Recipe list contains: ");
                 for(int i = 0; i < recipes.size(); i++){
-                    outText.append("Recipe list contains: " + recipes.get(i).getName());
+                    outText.append(recipes.get(i).getName() + " ");
 
                 }
 
