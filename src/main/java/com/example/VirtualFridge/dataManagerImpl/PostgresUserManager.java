@@ -155,8 +155,9 @@ public class PostgresUserManager implements UserManager {
             stmt = connection.createStatement();
             String udapteSQL =
                     "UPDATE users " +
-                            "SET name = '" + user.getName() + "', email = '" + user.getEmail() +"', password ='"
-                            + user.getPassword() + "' " +
+                            "SET name = '" + user.getName() +
+                            "', email = '" + user.getEmail() +
+                            "', password ='" + user.getPassword() +"' "+
                             "WHERE id = " + user.getID();
 
 
@@ -822,15 +823,10 @@ public class PostgresUserManager implements UserManager {
                         }
                         else hasAllIng = false;
                     }
-
                     if(!hasAllIng) break; //Ingredient not found, move to next recipe
                 }
-
                 if(hasAllIng){ r.setIngredients(rIngs); RecipeSugs.add(r); }
-
             }
-
-
         return RecipeSugs;
     }
 
